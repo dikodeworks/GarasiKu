@@ -576,12 +576,26 @@
                     </div>
                 </div>
                 <div>
-                    <label class="block font-medium mb-1">Jenis Pekerjaan</label>
-                    <input type="text" id="srvTask" placeholder="misal: Servis Berkala & Ganti Oli Mesin" required class="w-full p-2.5 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-[#F6F7F9] dark:bg-neutral-900 text-[#141414] dark:text-white outline-none">
+                    <div class="flex items-center justify-between mb-1">
+                        <label class="block font-medium">Jenis Pekerjaan</label>
+                        <button type="button" onclick="addServiceItemRow('task')" class="inline-flex items-center space-x-1 px-2.5 py-1 rounded-full border border-neutral-200 dark:border-neutral-700 text-[10px] font-semibold hover:bg-neutral-50 dark:hover:bg-neutral-800 transition">
+                            <i data-lucide="plus" class="w-3 h-3"></i>
+                            <span>Tambah</span>
+                        </button>
+                    </div>
+                    <p class="text-[10px] text-neutral-400 mb-2">Nama pekerjaan di kiri, sub biayanya di kanan.</p>
+                    <div id="srvTaskItems" class="space-y-2"></div>
                 </div>
                 <div>
-                    <label class="block font-medium mb-1">Suku Cadang Diganti</label>
-                    <input type="text" id="srvParts" placeholder="misal: Oli MPX2, Busi, Filter Udara" class="w-full p-2.5 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-[#F6F7F9] dark:bg-neutral-900 text-[#141414] dark:text-white outline-none">
+                    <div class="flex items-center justify-between mb-1">
+                        <label class="block font-medium">Suku Cadang Diganti</label>
+                        <button type="button" onclick="addServiceItemRow('part')" class="inline-flex items-center space-x-1 px-2.5 py-1 rounded-full border border-neutral-200 dark:border-neutral-700 text-[10px] font-semibold hover:bg-neutral-50 dark:hover:bg-neutral-800 transition">
+                            <i data-lucide="plus" class="w-3 h-3"></i>
+                            <span>Tambah</span>
+                        </button>
+                    </div>
+                    <p class="text-[10px] text-neutral-400 mb-2">Nama suku cadang di kiri, sub biayanya di kanan.</p>
+                    <div id="srvPartItems" class="space-y-2"></div>
                 </div>
                 <div class="grid grid-cols-2 gap-3">
                     <div>
@@ -590,7 +604,8 @@
                     </div>
                     <div>
                         <label class="block font-medium mb-1">Total Biaya (Rp)</label>
-                        <input type="number" id="srvCost" placeholder="150000" required class="w-full p-2.5 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-[#F6F7F9] dark:bg-neutral-900 text-[#141414] dark:text-white font-mono outline-none">
+                        <input type="number" id="srvCost" readonly class="w-full p-2.5 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-neutral-100 dark:bg-neutral-800 text-[#141414] dark:text-white font-mono outline-none cursor-not-allowed" placeholder="0">
+                        <p class="text-[10px] text-neutral-400 mt-1">Otomatis dari total sub biaya.</p>
                     </div>
                 </div>
                 <div>
@@ -706,10 +721,48 @@
                 { id: 'v_2', label: 'Mobil Keluarga', model: 'Toyota Avanza Veloz 2022', type: 'Roda 4', plate: 'B 1899 DKW' }
             ],
             serviceLogs: [
-                { id: 's_1', vehicleId: 'v_1', date: '2026-01-10', odometer: 12500, task: 'Servis Rutin & Ganti Oli MPX2', parts: 'Oli Mesin MPX2, Busi', location: 'AHASS Kebayoran', cost: 145000, nextDate: '2026-04-10' },
-                { id: 's_2', vehicleId: 'v_2', date: '2026-02-05', odometer: 24300, task: 'Servis 20.000 KM & Tune Up', parts: 'Oli TMO 5W-30, Filter Oli, Filter Udara', location: 'Auto2000 Radio Dalam', cost: 1250000, nextDate: '2026-08-05' },
-                { id: 's_3', vehicleId: 'v_1', date: '2025-10-12', odometer: 9800, task: 'Ganti Ban Belakang', parts: 'Ban FDR Sport Zevo 90/90-14', location: 'Planet Ban', cost: 310000, nextDate: '2026-01-10' },
-                { id: 's_4', vehicleId: 'v_2', date: '2025-08-20', odometer: 18000, task: 'Ganti Kampas Rem Depan', parts: 'Brake Pad Original Toyota', location: 'Auto2000', cost: 680000, nextDate: '2026-02-05' }
+                {
+                    id: 's_1', vehicleId: 'v_1', date: '2026-01-10', odometer: 12500,
+                    task: 'Servis Rutin, Ganti Oli Mesin',
+                    taskItems: [
+                        { name: 'Servis Rutin', cost: 50000 },
+                        { name: 'Ganti Oli Mesin', cost: 45000 }
+                    ],
+                    parts: 'Oli Mesin MPX2',
+                    partItems: [{ name: 'Oli Mesin MPX2', cost: 50000 }],
+                    location: 'AHASS Kebayoran', cost: 145000, nextDate: '2026-04-10'
+                },
+                {
+                    id: 's_2', vehicleId: 'v_2', date: '2026-02-05', odometer: 24300,
+                    task: 'Servis 20.000 KM, Tune Up',
+                    taskItems: [
+                        { name: 'Servis 20.000 KM', cost: 400000 },
+                        { name: 'Tune Up', cost: 250000 }
+                    ],
+                    parts: 'Oli TMO 5W-30, Filter Oli, Filter Udara',
+                    partItems: [
+                        { name: 'Oli TMO 5W-30', cost: 500000 },
+                        { name: 'Filter Oli', cost: 60000 },
+                        { name: 'Filter Udara', cost: 40000 }
+                    ],
+                    location: 'Auto2000 Radio Dalam', cost: 1250000, nextDate: '2026-08-05'
+                },
+                {
+                    id: 's_3', vehicleId: 'v_1', date: '2025-10-12', odometer: 9800,
+                    task: 'Ganti Ban Belakang',
+                    taskItems: [{ name: 'Ganti Ban Belakang', cost: 50000 }],
+                    parts: 'Ban FDR Sport Zevo 90/90-14',
+                    partItems: [{ name: 'Ban FDR Sport Zevo 90/90-14', cost: 260000 }],
+                    location: 'Planet Ban', cost: 310000, nextDate: '2026-01-10'
+                },
+                {
+                    id: 's_4', vehicleId: 'v_2', date: '2025-08-20', odometer: 18000,
+                    task: 'Ganti Kampas Rem Depan',
+                    taskItems: [{ name: 'Ganti Kampas Rem Depan', cost: 80000 }],
+                    parts: 'Brake Pad Original Toyota',
+                    partItems: [{ name: 'Brake Pad Original Toyota', cost: 600000 }],
+                    location: 'Auto2000', cost: 680000, nextDate: '2026-02-05'
+                }
             ],
             taxRecords: [
                 { id: 't_1', vehicleId: 'v_1', lastDate: '2025-11-20', dueDate: '2026-11-20', amount: 320000 },
@@ -1303,6 +1356,43 @@
         }
 
         // --- SERVICE TAB ---
+        function getServiceItems(log, kind) {
+            const key = kind === 'part' ? 'partItems' : 'taskItems';
+            if (Array.isArray(log[key])) {
+                return log[key]
+                    .filter(item => item && String(item.name || '').trim())
+                    .map(item => ({ name: String(item.name).trim(), cost: Number(item.cost) || 0 }));
+            }
+            if (kind === 'part') {
+                // Data lama: suku cadang masih berupa teks gabungan tanpa sub biaya.
+                const raw = (log.parts || '').trim();
+                if (!raw) return [];
+                return raw.split(',').map(name => ({ name: name.trim(), cost: null })).filter(item => item.name);
+            }
+            const name = (log.task || '').trim();
+            return name ? [{ name, cost: Number(log.cost) || 0 }] : [];
+        }
+
+        function renderServiceItemsBreakdown(log) {
+            const taskItems = getServiceItems(log, 'task');
+            const partItems = getServiceItems(log, 'part');
+
+            const itemRow = (item) => `
+                <div class="flex items-baseline justify-between gap-4">
+                    <span class="text-[#141414] dark:text-neutral-100">${item.name}</span>
+                    <span class="font-mono text-[10px] text-neutral-500 dark:text-neutral-400 whitespace-nowrap">${item.cost === null ? '-' : formatRupiah(item.cost)}</span>
+                </div>`;
+
+            const section = (title, items) => items.length ? `
+                <div>
+                    <div class="text-[9px] font-bold uppercase tracking-wider text-neutral-400 mb-1">${title}</div>
+                    <div class="space-y-0.5">${items.map(itemRow).join('')}</div>
+                </div>` : '';
+
+            const html = section('Jenis Pekerjaan', taskItems) + section('Suku Cadang', partItems);
+            return `<div class="space-y-2 min-w-[210px] max-w-[320px]">${html || '<span class="text-neutral-400">-</span>'}</div>`;
+        }
+
         function renderServiceLogs() {
             const tableBody = document.getElementById('serviceLogsTableBody');
             const filterVehId = document.getElementById('serviceVehicleFilter')?.value || 'ALL';
@@ -1331,8 +1421,7 @@
                         </td>
                         <td class="p-3.5 font-mono">${Number(s.odometer).toLocaleString('id-ID')} KM</td>
                         <td class="p-3.5">
-                            <div class="font-medium text-neutral-900 dark:text-neutral-100">${s.task}</div>
-                            <div class="text-[10px] text-neutral-400">${s.parts || 'Suku cadang: -'}</div>
+                            ${renderServiceItemsBreakdown(s)}
                         </td>
                         <td class="p-3.5 text-neutral-500">${s.location || '-'}</td>
                         <td class="p-3.5 text-right font-mono font-semibold text-[#141414] dark:text-white">${formatRupiah(s.cost)}</td>
@@ -1351,6 +1440,60 @@
             lucide.createIcons();
         }
 
+        function addServiceItemRow(kind, name = '', cost = '') {
+            const containerId = kind === 'part' ? 'srvPartItems' : 'srvTaskItems';
+            const container = document.getElementById(containerId);
+            if (!container) return;
+
+            const row = document.createElement('div');
+            row.className = 'service-item-row flex items-start gap-2';
+            row.innerHTML = `
+                <input type="text" class="srv-item-name flex-1 min-w-0 p-2 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-[#F6F7F9] dark:bg-neutral-900 text-[#141414] dark:text-white outline-none" placeholder="${kind === 'part' ? 'misal: Oli Mesin MPX2' : 'misal: Servis Mesin berkala'}">
+                <div class="relative w-32 shrink-0">
+                    <span class="absolute left-2 top-1/2 -translate-y-1/2 text-[10px] text-neutral-400 font-mono pointer-events-none">Rp</span>
+                    <input type="number" min="0" step="1" class="srv-item-cost w-full p-2 pl-7 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-[#F6F7F9] dark:bg-neutral-900 text-[#141414] dark:text-white font-mono outline-none" placeholder="0" oninput="updateServiceTotal()">
+                </div>
+                <button type="button" onclick="removeServiceItemRow(this)" class="mt-1.5 p-1 rounded-lg text-neutral-400 hover:text-red-600 transition" title="Hapus baris">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
+            `;
+
+            row.querySelector('.srv-item-name').value = name || '';
+            row.querySelector('.srv-item-cost').value = (cost === null || cost === undefined || cost === '') ? '' : Number(cost);
+            container.appendChild(row);
+            updateServiceTotal();
+            lucide.createIcons();
+        }
+
+        function removeServiceItemRow(button) {
+            const row = button.closest('.service-item-row');
+            if (!row) return;
+            const container = row.parentElement;
+            row.remove();
+            if (!container.querySelector('.service-item-row')) {
+                addServiceItemRow(container.id === 'srvPartItems' ? 'part' : 'task');
+            }
+            updateServiceTotal();
+        }
+
+        function collectServiceItems(containerId) {
+            const container = document.getElementById(containerId);
+            if (!container) return [];
+            return Array.from(container.querySelectorAll('.service-item-row'))
+                .map(row => ({
+                    name: (row.querySelector('.srv-item-name')?.value || '').trim(),
+                    cost: Math.max(0, Number(row.querySelector('.srv-item-cost')?.value) || 0)
+                }))
+                .filter(item => item.name);
+        }
+
+        function updateServiceTotal() {
+            const total = Array.from(document.querySelectorAll('#srvTaskItems .srv-item-cost, #srvPartItems .srv-item-cost'))
+                .reduce((sum, input) => sum + (Number(input.value) || 0), 0);
+            const el = document.getElementById('srvCost');
+            if (el) el.value = total;
+        }
+
         function openServiceModal(id = null) {
             if (appData.vehicles.length === 0) {
                 alert('Silakan tambahkan kendaraan terlebih dahulu.');
@@ -1363,6 +1506,11 @@
             document.getElementById('srvId').value = '';
             document.getElementById('serviceModalTitle').innerText = id ? 'Edit Catatan Servis' : 'Tambah Catatan Servis';
 
+            const taskContainer = document.getElementById('srvTaskItems');
+            const partContainer = document.getElementById('srvPartItems');
+            taskContainer.innerHTML = '';
+            partContainer.innerHTML = '';
+
             const todayStr = new Date().toISOString().split('T')[0];
             document.getElementById('srvDate').value = todayStr;
             autoCalcNextServiceDate();
@@ -1374,13 +1522,18 @@
                     document.getElementById('srvVehicleId').value = log.vehicleId;
                     document.getElementById('srvDate').value = log.date;
                     document.getElementById('srvOdometer').value = log.odometer;
-                    document.getElementById('srvTask').value = log.task;
-                    document.getElementById('srvParts').value = log.parts || '';
                     document.getElementById('srvLocation').value = log.location || '';
-                    document.getElementById('srvCost').value = log.cost;
                     document.getElementById('srvNextDate').value = log.nextDate;
+
+                    getServiceItems(log, 'task').forEach(item => addServiceItemRow('task', item.name, item.cost));
+                    getServiceItems(log, 'part').forEach(item => addServiceItemRow('part', item.name, item.cost));
                 }
             }
+
+            if (!taskContainer.querySelector('.service-item-row')) addServiceItemRow('task');
+            if (!partContainer.querySelector('.service-item-row')) addServiceItemRow('part');
+
+            updateServiceTotal();
             document.getElementById('serviceModal').classList.remove('hidden');
         }
 
@@ -1401,17 +1554,34 @@
             const vehicleId = document.getElementById('srvVehicleId').value;
             const date = document.getElementById('srvDate').value;
             const odometer = Number(document.getElementById('srvOdometer').value);
-            const task = document.getElementById('srvTask').value.trim();
-            const parts = document.getElementById('srvParts').value.trim();
             const location = document.getElementById('srvLocation').value.trim();
-            const cost = Number(document.getElementById('srvCost').value);
             const nextDate = document.getElementById('srvNextDate').value;
+
+            const taskItems = collectServiceItems('srvTaskItems');
+            const partItems = collectServiceItems('srvPartItems');
+
+            const hasNamelessCost = Array.from(document.querySelectorAll('#srvTaskItems .service-item-row, #srvPartItems .service-item-row'))
+                .some(row => !(row.querySelector('.srv-item-name')?.value || '').trim() && Number(row.querySelector('.srv-item-cost')?.value) > 0);
+
+            if (hasNamelessCost) {
+                alert('Lengkapi nama item untuk setiap sub biaya yang diisi.');
+                return;
+            }
+
+            if (taskItems.length === 0) {
+                alert('Isi minimal satu jenis pekerjaan beserta sub biayanya.');
+                return;
+            }
+
+            const cost = [...taskItems, ...partItems].reduce((sum, item) => sum + item.cost, 0);
+            const task = taskItems.map(item => item.name).join(', ');
+            const parts = partItems.map(item => item.name).join(', ');
 
             if (id) {
                 const idx = appData.serviceLogs.findIndex(s => s.id === id);
-                if (idx !== -1) appData.serviceLogs[idx] = { id, vehicleId, date, odometer, task, parts, location, cost, nextDate };
+                if (idx !== -1) appData.serviceLogs[idx] = { id, vehicleId, date, odometer, task, taskItems, parts, partItems, location, cost, nextDate };
             } else {
-                appData.serviceLogs.push({ id: 's_' + Date.now(), vehicleId, date, odometer, task, parts, location, cost, nextDate });
+                appData.serviceLogs.push({ id: 's_' + Date.now(), vehicleId, date, odometer, task, taskItems, parts, partItems, location, cost, nextDate });
             }
             saveToStorage();
             closeServiceModal();
