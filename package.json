@@ -1,0 +1,25 @@
+{
+  "name": "garasiku-pwa",
+  "version": "1.1.0",
+  "description": "Garasiku by DikodeWorks — PWA pengingat servis, pajak, dan SIM kendaraan",
+  "scripts": {
+    "vendor": "node tools/vendor.mjs",
+    "icons": "node tools/icons.mjs",
+    "css": "tailwindcss -i src/input.css -o css/app.css --minify",
+    "build": "npm run css && node build.mjs",
+    "serve": "npx --yes serve . -l 8080"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@fontsource/jetbrains-mono": "^5.3.0",
+    "@fontsource/open-sans": "^5.3.0",
+    "chart.js": "^4.6.1",
+    "lucide": "^1.76.0",
+    "opentype.js": "^2.0.0",
+    "sharp": "^0.35.5",
+    "tailwindcss": "^3.4.19"
+  },
+  "private": true
+}

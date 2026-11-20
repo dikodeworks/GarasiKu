@@ -1,0 +1,27 @@
+{
+  "id": "./",
+  "name": "Garasiku — Pengingat Servis, Pajak & SIM",
+  "short_name": "Garasiku",
+  "description": "Catat servis kendaraan, pantau jatuh tempo pajak PKB dan masa berlaku SIM. Data tersimpan lokal, bisa dipakai tanpa internet.",
+  "start_url": "./?source=pwa",
+  "scope": "./",
+  "display": "standalone",
+  "display_override": ["standalone", "minimal-ui"],
+  "orientation": "any",
+  "background_color": "#F6F7F9",
+  "theme_color": "#F6F7F9",
+  "lang": "id",
+  "dir": "ltr",
+  "categories": ["productivity", "utilities", "lifestyle"],
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" },
+    { "src": "icons/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ],
+  "shortcuts": [
+    { "name": "Catat Servis", "short_name": "Servis", "url": "./?tab=service", "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" }] },
+    { "name": "Pajak Kendaraan", "short_name": "Pajak", "url": "./?tab=pajak", "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" }] },
+    { "name": "Masa Berlaku SIM", "short_name": "SIM", "url": "./?tab=sim", "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" }] }
+  ]
+}
