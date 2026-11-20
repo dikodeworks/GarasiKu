@@ -1,3 +1,4 @@
+// index.html tidak di-precache langsung (di Cloudflare ia di-redirect ke "/"); halaman utama di-cache lewat "./".
 // Menghasilkan sw.js dari sw.template.js: daftar precache otomatis + versi = hash isi file.
 // Jalankan setiap selesai mengubah file aplikasi:  npm run build
 import { readFileSync, writeFileSync, readdirSync, statSync } from 'node:fs';
@@ -17,6 +18,6 @@ const version = hash.digest('hex').slice(0, 10);
 
 const sw = readFileSync('sw.template.js', 'utf8')
   .replace('__VERSION__', version)
-  .replace('__PRECACHE__', JSON.stringify(['./', ...files], null, 2));
+  .replace('__PRECACHE__', JSON.stringify(['./', ...files.filter((f) => f !== 'index.html')], null, 2));
 writeFileSync('sw.js', sw);
-console.log(`sw.js dibuat — versi ${version}, ${files.length + 1} berkas di-precache`);
+console.log(`sw.js dibuat — versi ${version}, ${files.length} berkas di-precache`);

@@ -7,7 +7,8 @@
     <meta name="description" content="Garasiku: pengingat servis, pajak PKB, dan masa berlaku SIM. Data tersimpan lokal dan bisa dipakai tanpa internet.">
 
     <!-- PWA -->
-    <meta name="theme-color" id="metaTheme" content="#F6F7F9">
+    <meta name="theme-color" content="#F6F7F9">
+    <meta name="color-scheme" content="light">
     <link rel="manifest" href="manifest.webmanifest">
     <link rel="icon" type="image/svg+xml" href="icons/favicon.svg">
     <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
@@ -18,20 +19,6 @@
     <meta name="apple-mobile-web-app-title" content="Garasiku">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="format-detection" content="telephone=no">
-
-    <!-- Tema dipasang sebelum render agar tidak berkedip -->
-    <script>
-        (function () {
-            var dark = false;
-            try {
-                var t = localStorage.getItem('garasiku_theme');
-                dark = t ? t === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
-            } catch (e) {}
-            if (dark) document.documentElement.classList.add('dark');
-            var m = document.getElementById('metaTheme');
-            if (m) m.setAttribute('content', dark ? '#0b0b0b' : '#F6F7F9');
-        })();
-    </script>
 
     <!-- Semua aset lokal (tanpa CDN) agar benar-benar offline -->
     <link rel="stylesheet" href="css/fonts.css">
@@ -52,7 +39,6 @@
         ::-webkit-scrollbar { width: 5px; height: 5px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #d4d4d4; border-radius: 9999px; }
-        .dark ::-webkit-scrollbar-thumb { background: #333333; }
         
         /* Exact Width Logo Alignment for by DikodeWorks. */
         .logo-subtitle {
@@ -94,28 +80,11 @@
         .mnav-btn { padding: 0.25rem 1rem; font-size: 0.75rem; line-height: 1rem; font-weight: 700; border-radius: 9999px; white-space: nowrap; border: 1px solid transparent; }
         .mnav-on  { background: #141414; color: #fff; border-color: #141414; }
         .mnav-off { background: #fff; color: #404040; border-color: #d4d4d4; }
-        .dark .mnav-on  { background: #fff; color: #141414; border-color: #fff; }
-        .dark .mnav-off { background: #141414; color: #d4d4d4; border-color: #333; }
 
-        /* ---------- Mode gelap (bagian yang tidak punya varian dark:) ---------- */
-        .dark { color-scheme: dark; }
-        .theme-icon-dark { display: none; }
-        .dark .theme-icon-light { display: none; }
-        .dark .theme-icon-dark { display: inline-flex; }
-        .dark .bg-white { background-color: #141414; }
-        .dark header.sticky { background-color: rgba(20, 20, 20, 0.92); border-color: #262626; }
-        .dark .text-\[\#141414\] { color: #f5f5f5; }
-        .dark .border-neutral-200, .dark .border-neutral-300,
-        .dark .border-neutral-200\/80, .dark .border-neutral-300\/80, .dark .border-neutral-200\/60 { border-color: #2a2a2a; }
-        .dark .hover\:bg-neutral-100:hover, .dark .hover\:bg-neutral-50:hover { background-color: #262626; }
-        .dark .text-neutral-600 { color: #a3a3a3; }
-        .dark .text-neutral-700 { color: #d4d4d4; }
-        .dark #navGlider { background-color: #ffffff; }
-        .dark #tab-dashboard.text-white, .dark #tab-pencatatan.text-white { color: #141414; }
-        .dark #tab-dashboard.text-neutral-600, .dark #tab-pencatatan.text-neutral-600 { color: #d4d4d4; }
+        html { color-scheme: light; }
     </style>
 </head>
-<body class="bg-[#F6F7F9] text-[#141414] dark:bg-[#0b0b0b] dark:text-neutral-100 font-sans min-h-full flex flex-col transition-colors duration-200">
+<body class="bg-[#F6F7F9] text-[#141414] font-sans min-h-full flex flex-col transition-colors duration-200">
 
     <!-- MAILGATE HEADER BAR -->
     <header class="border-b border-neutral-200/80 bg-white/95 backdrop-blur sticky top-0 z-30 px-4 sm:px-8 py-3.5">
@@ -170,10 +139,6 @@
                     </div>
                 </nav>
 
-                <button onclick="toggleTheme()" aria-label="Ganti tema terang/gelap" title="Ganti tema" class="inline-flex items-center justify-center w-8 h-8 rounded-full border border-neutral-300/80 hover:bg-neutral-100 transition shadow-sm bg-white text-[#141414]">
-                    <span class="theme-icon-light inline-flex"><i data-lucide="moon" class="w-3.5 h-3.5"></i></span>
-                    <span class="theme-icon-dark"><i data-lucide="sun" class="w-3.5 h-3.5"></i></span>
-                </button>
                 <!-- PENGATURAN BUTTON -->
                 <button onclick="openSettingsModal()" class="inline-flex items-center space-x-1.5 px-4 py-1.5 text-xs font-bold rounded-full border border-neutral-300/80 hover:bg-neutral-100 transition shadow-sm bg-white text-[#141414]">
                     <i data-lucide="settings" class="w-3.5 h-3.5"></i>
@@ -183,10 +148,6 @@
 
             <!-- MOBILE RIGHT ACTION CONTROLS -->
             <div class="flex md:hidden items-center space-x-2">
-                <button onclick="toggleTheme()" aria-label="Ganti tema terang/gelap" title="Ganti tema" class="inline-flex items-center justify-center w-8 h-8 rounded-full border border-neutral-300/80 hover:bg-neutral-100 transition shadow-sm bg-white text-[#141414]">
-                    <span class="theme-icon-light inline-flex"><i data-lucide="moon" class="w-3.5 h-3.5"></i></span>
-                    <span class="theme-icon-dark"><i data-lucide="sun" class="w-3.5 h-3.5"></i></span>
-                </button>
                 <button onclick="openSettingsModal()" class="inline-flex items-center space-x-1 px-3 py-1.5 text-xs font-bold rounded-full border border-neutral-300 bg-white text-[#141414]">
                     <i data-lucide="settings" class="w-3.5 h-3.5"></i>
                     <span>Pengaturan</span>
@@ -233,47 +194,47 @@
             <!-- TOP 4 STAT CARDS -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 
-                <div class="p-5 rounded-2xl border border-blue-100 dark:border-blue-950/40 bg-blue-50/50 dark:bg-blue-950/20 shadow-sm flex flex-col justify-between space-y-3">
-                    <div class="flex items-center space-x-2 text-xs font-semibold text-blue-700 dark:text-blue-300">
+                <div class="p-5 rounded-2xl border border-blue-100 bg-blue-50/50 shadow-sm flex flex-col justify-between space-y-3">
+                    <div class="flex items-center space-x-2 text-xs font-semibold text-blue-700">
                         <span class="w-2 h-2 rounded-full bg-blue-500"></span>
                         <span>Total Kendaraan</span>
                     </div>
                     <div>
-                        <div class="text-3xl font-extrabold font-mono text-[#141414] dark:text-white" id="statTotalVehicles">0</div>
-                        <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-1" id="statVehicleSub">0 Roda 2 • 0 Roda 4</p>
+                        <div class="text-3xl font-extrabold font-mono text-[#141414]" id="statTotalVehicles">0</div>
+                        <p class="text-xs text-neutral-500 mt-1" id="statVehicleSub">0 Roda 2 • 0 Roda 4</p>
                     </div>
                 </div>
 
-                <div class="p-5 rounded-2xl border border-emerald-100 dark:border-emerald-950/40 bg-emerald-50/50 dark:bg-emerald-950/20 shadow-sm flex flex-col justify-between space-y-3">
-                    <div class="flex items-center space-x-2 text-xs font-semibold text-emerald-700 dark:text-emerald-300">
+                <div class="p-5 rounded-2xl border border-emerald-100 bg-emerald-50/50 shadow-sm flex flex-col justify-between space-y-3">
+                    <div class="flex items-center space-x-2 text-xs font-semibold text-emerald-700">
                         <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
                         <span>Dokumen & Servis Aman</span>
                     </div>
                     <div>
-                        <div class="text-3xl font-extrabold font-mono text-emerald-700 dark:text-emerald-400" id="statAmanCount">0</div>
-                        <p class="text-xs text-emerald-600/80 dark:text-emerald-400/80 mt-1">pajak, SIM & servis aktif > 30 hari</p>
+                        <div class="text-3xl font-extrabold font-mono text-emerald-700" id="statAmanCount">0</div>
+                        <p class="text-xs text-emerald-600/80 mt-1">pajak, SIM & servis aktif > 30 hari</p>
                     </div>
                 </div>
 
-                <div class="p-5 rounded-2xl border border-amber-100 dark:border-amber-950/40 bg-amber-50/50 dark:bg-amber-950/20 shadow-sm flex flex-col justify-between space-y-3">
-                    <div class="flex items-center space-x-2 text-xs font-semibold text-amber-800 dark:text-amber-300">
+                <div class="p-5 rounded-2xl border border-amber-100 bg-amber-50/50 shadow-sm flex flex-col justify-between space-y-3">
+                    <div class="flex items-center space-x-2 text-xs font-semibold text-amber-800">
                         <span class="w-2 h-2 rounded-full bg-amber-500"></span>
                         <span>Perlu Perhatian</span>
                     </div>
                     <div>
-                        <div class="text-3xl font-extrabold font-mono text-amber-600 dark:text-amber-400" id="statWarningCount">0</div>
-                        <p class="text-xs text-amber-700/80 dark:text-amber-400/80 mt-1" id="statWarningSub">jadwal &lt; 30 hari lagi</p>
+                        <div class="text-3xl font-extrabold font-mono text-amber-600" id="statWarningCount">0</div>
+                        <p class="text-xs text-amber-700/80 mt-1" id="statWarningSub">jadwal &lt; 30 hari lagi</p>
                     </div>
                 </div>
 
-                <div class="p-5 rounded-2xl border border-rose-100 dark:border-rose-950/40 bg-rose-50/50 dark:bg-rose-950/20 shadow-sm flex flex-col justify-between space-y-3">
-                    <div class="flex items-center space-x-2 text-xs font-semibold text-rose-700 dark:text-rose-300">
+                <div class="p-5 rounded-2xl border border-rose-100 bg-rose-50/50 shadow-sm flex flex-col justify-between space-y-3">
+                    <div class="flex items-center space-x-2 text-xs font-semibold text-rose-700">
                         <span class="w-2 h-2 rounded-full bg-[#D63333]"></span>
                         <span>Biaya Servis (Thn Ini)</span>
                     </div>
                     <div>
-                        <div class="text-2xl font-extrabold font-mono text-[#141414] dark:text-white" id="statYearlyCost">Rp 0</div>
-                        <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-1">total akumulasi 12 bulan</p>
+                        <div class="text-2xl font-extrabold font-mono text-[#141414]" id="statYearlyCost">Rp 0</div>
+                        <p class="text-xs text-neutral-500 mt-1">total akumulasi 12 bulan</p>
                     </div>
                 </div>
             </div>
@@ -282,19 +243,19 @@
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
 
                 <!-- LEFT CARD: STATUS DOKUMEN (DONUT CHART) -->
-                <div class="lg:col-span-4 p-6 rounded-2xl border border-neutral-200/80 dark:border-neutral-800 bg-white dark:bg-[#141414] shadow-sm flex flex-col justify-between space-y-4">
+                <div class="lg:col-span-4 p-6 rounded-2xl border border-neutral-200/80 bg-white shadow-sm flex flex-col justify-between space-y-4">
                     <div>
-                        <h3 class="text-base font-semibold text-[#141414] dark:text-white">
+                        <h3 class="text-base font-semibold text-[#141414]">
                             Status Dokumen<span class="text-[#D63333]">.</span>
                         </h3>
-                        <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">Ringkasan status Pajak, SIM & Servis</p>
+                        <p class="text-xs text-neutral-500 mt-0.5">Ringkasan status Pajak, SIM & Servis</p>
                     </div>
 
                     <div class="flex items-center justify-between gap-4 my-2">
                         <div class="w-32 h-32 relative shrink-0">
                             <canvas id="donutChart"></canvas>
                             <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                                <span class="text-xl font-extrabold font-mono text-[#141414] dark:text-white" id="donutTotalCount">0</span>
+                                <span class="text-xl font-extrabold font-mono text-[#141414]" id="donutTotalCount">0</span>
                                 <span class="text-[9px] uppercase font-semibold text-neutral-400">Total</span>
                             </div>
                         </div>
@@ -303,51 +264,51 @@
                             <div class="flex items-center justify-between">
                                 <div class="flex items-center space-x-2">
                                     <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
-                                    <span class="text-neutral-600 dark:text-neutral-300">Aman</span>
+                                    <span class="text-neutral-600">Aman</span>
                                 </div>
-                                <span class="font-mono font-bold text-[#141414] dark:text-white" id="donutAman">0</span>
+                                <span class="font-mono font-bold text-[#141414]" id="donutAman">0</span>
                             </div>
                             <div class="flex items-center justify-between">
                                 <div class="flex items-center space-x-2">
                                     <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
-                                    <span class="text-neutral-600 dark:text-neutral-300">Segera</span>
+                                    <span class="text-neutral-600">Segera</span>
                                 </div>
-                                <span class="font-mono font-bold text-[#141414] dark:text-white" id="donutSegera">0</span>
+                                <span class="font-mono font-bold text-[#141414]" id="donutSegera">0</span>
                             </div>
                             <div class="flex items-center justify-between">
                                 <div class="flex items-center space-x-2">
                                     <span class="w-2.5 h-2.5 rounded-full bg-red-600"></span>
-                                    <span class="text-neutral-600 dark:text-neutral-300">Terlewat</span>
+                                    <span class="text-neutral-600">Terlewat</span>
                                 </div>
-                                <span class="font-mono font-bold text-[#141414] dark:text-white" id="donutTerlewat">0</span>
+                                <span class="font-mono font-bold text-[#141414]" id="donutTerlewat">0</span>
                             </div>
                         </div>
                     </div>
 
-                    <div class="pt-3 border-t border-neutral-100 dark:border-neutral-800 text-[11px] text-neutral-400 flex items-center justify-between">
+                    <div class="pt-3 border-t border-neutral-100 text-[11px] text-neutral-400 flex items-center justify-between">
                         <span>Status otomatis diperbarui</span>
                         <i data-lucide="shield-check" class="w-3.5 h-3.5 text-emerald-500"></i>
                     </div>
                 </div>
 
                 <!-- RIGHT CARD: TREN BIAYA SERVIS (MODERN LINE CHART) -->
-                <div class="lg:col-span-8 p-6 rounded-2xl border border-neutral-200/80 dark:border-neutral-800 bg-white dark:bg-[#141414] shadow-sm flex flex-col justify-between space-y-4">
+                <div class="lg:col-span-8 p-6 rounded-2xl border border-neutral-200/80 bg-white shadow-sm flex flex-col justify-between space-y-4">
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                         <div>
-                            <h3 class="text-base font-semibold text-[#141414] dark:text-white flex items-center space-x-2">
+                            <h3 class="text-base font-semibold text-[#141414] flex items-center space-x-2">
                                 <span>Tren Biaya Servis</span>
                                 <span class="text-[#D63333]">.</span>
                             </h3>
-                            <div class="flex items-center space-x-3 text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">
+                            <div class="flex items-center space-x-3 text-xs text-neutral-500 mt-0.5">
                                 <span class="flex items-center space-x-1.5">
                                     <span class="w-2.5 h-2.5 rounded-full bg-[#D63333]"></span>
-                                    <span>Total Periode Ini: <strong id="chartPeriodTotal" class="font-mono text-[#141414] dark:text-white">Rp 0</strong></span>
+                                    <span>Total Periode Ini: <strong id="chartPeriodTotal" class="font-mono text-[#141414]">Rp 0</strong></span>
                                 </span>
                             </div>
                         </div>
 
                         <!-- TIME RANGE SELECTORS -->
-                        <div class="flex flex-wrap items-center gap-1 bg-[#F0F2F5] dark:bg-neutral-900 p-1 rounded-full border border-neutral-200/70 dark:border-neutral-800 text-[11px] font-semibold">
+                        <div class="flex flex-wrap items-center gap-1 bg-[#F0F2F5] p-1 rounded-full border border-neutral-200/70 text-[11px] font-semibold">
                             <button onclick="setChartRange('3M')" id="range-3M" class="range-btn px-2.5 py-1 rounded-full transition border border-transparent">3 Bulan</button>
                             <button onclick="setChartRange('6M')" id="range-6M" class="range-btn px-2.5 py-1 rounded-full transition border border-transparent">6 Bulan</button>
                             <button onclick="setChartRange('12M')" id="range-12M" class="range-btn active px-2.5 py-1 rounded-full transition border border-transparent">12 Bulan</button>
@@ -362,23 +323,23 @@
             </div>
 
             <!-- BOTTOM ROW: FULL WIDTH TABLE CARD -->
-            <div class="p-6 rounded-2xl border border-neutral-200/80 dark:border-neutral-800 bg-white dark:bg-[#141414] shadow-sm space-y-4">
+            <div class="p-6 rounded-2xl border border-neutral-200/80 bg-white shadow-sm space-y-4">
                 
-                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-2 border-b border-neutral-100 dark:border-neutral-800">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-2 border-b border-neutral-100">
                     <div>
-                        <h3 class="text-base font-semibold text-[#141414] dark:text-white">
+                        <h3 class="text-base font-semibold text-[#141414]">
                             Jadwal & Riwayat Terkini<span class="text-[#D63333]">.</span>
                         </h3>
-                        <p class="text-xs text-neutral-500 dark:text-neutral-400">Ringkasan pengingat pajak, perpanjangan SIM, jadwal servis berikutnya, dan riwayat servis</p>
+                        <p class="text-xs text-neutral-500">Ringkasan pengingat pajak, perpanjangan SIM, jadwal servis berikutnya, dan riwayat servis</p>
                     </div>
 
                     <div class="flex flex-wrap items-center gap-2">
                         <div class="relative flex-1 sm:w-64">
                             <i data-lucide="search" class="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400"></i>
-                            <input type="text" id="dashSearch" onkeyup="filterDashboardTable()" placeholder="Cari kendaraan, servis, SIM..." class="w-full pl-8 pr-3 py-1.5 text-xs rounded-full border border-neutral-200 dark:border-neutral-800 bg-[#F6F7F9] dark:bg-neutral-900 text-[#141414] dark:text-white placeholder-neutral-400 outline-none focus:border-[#D63333]">
+                            <input type="text" id="dashSearch" onkeyup="filterDashboardTable()" placeholder="Cari kendaraan, servis, SIM..." class="w-full pl-8 pr-3 py-1.5 text-xs rounded-full border border-neutral-200 bg-[#F6F7F9] text-[#141414] placeholder-neutral-400 outline-none focus:border-[#D63333]">
                         </div>
 
-                        <select id="dashStatusFilter" onchange="filterDashboardTable()" class="px-3 py-1.5 text-xs rounded-full border border-neutral-200 dark:border-neutral-800 bg-[#F6F7F9] dark:bg-neutral-900 text-[#141414] dark:text-white outline-none">
+                        <select id="dashStatusFilter" onchange="filterDashboardTable()" class="px-3 py-1.5 text-xs rounded-full border border-neutral-200 bg-[#F6F7F9] text-[#141414] outline-none">
                             <option value="ALL">Semua status</option>
                             <option value="AMAN">● Aman</option>
                             <option value="SEGERA">● Segera</option>
@@ -390,7 +351,7 @@
 
                 <div class="overflow-x-auto">
                     <table class="w-full text-left text-xs">
-                        <thead class="bg-[#F6F7F9]/80 dark:bg-neutral-900/60 font-semibold text-neutral-500 dark:text-neutral-400 border-y border-neutral-200/60 dark:border-neutral-800">
+                        <thead class="bg-[#F6F7F9]/80 font-semibold text-neutral-500 border-y border-neutral-200/60">
                             <tr>
                                 <th class="py-3 px-4 whitespace-nowrap">KATEGORI</th>
                                 <th class="py-3 px-4">ITEM / KENDARAAN</th>
@@ -400,7 +361,7 @@
                                 <th class="py-3 px-4 text-center whitespace-nowrap">AKSI / REMINDER</th>
                             </tr>
                         </thead>
-                        <tbody id="dashTableBody" class="divide-y divide-neutral-100 dark:divide-neutral-800/80">
+                        <tbody id="dashTableBody" class="divide-y divide-neutral-100">
                         </tbody>
                     </table>
                 </div>
@@ -412,7 +373,7 @@
         <section id="sec-vehicles" class="hidden space-y-6">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div>
-                    <h2 class="text-lg font-semibold tracking-tight text-[#141414] dark:text-white">Daftar Kendaraan Saya<span class="text-[#D63333]">.</span></h2>
+                    <h2 class="text-lg font-semibold tracking-tight text-[#141414]">Daftar Kendaraan Saya<span class="text-[#D63333]">.</span></h2>
                     <p class="text-xs text-neutral-500">Kelola daftar kendaraan Roda 2 & Roda 4 milik Anda.</p>
                 </div>
                 <div class="flex items-center space-x-2">
@@ -431,7 +392,7 @@
         <section id="sec-service" class="hidden space-y-6">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div>
-                    <h2 class="text-lg font-semibold tracking-tight text-[#141414] dark:text-white">Riwayat & Catatan Servis<span class="text-[#D63333]">.</span></h2>
+                    <h2 class="text-lg font-semibold tracking-tight text-[#141414]">Riwayat & Catatan Servis<span class="text-[#D63333]">.</span></h2>
                     <p class="text-xs text-neutral-500">Catat kilometer, pergantian suku cadang, dan lokasi bengkel. Interval: Roda 2 tiap 2.000 KM / 2 bulan, Roda 4 tiap 5.000 KM / 3 bulan.</p>
                 </div>
                 <button onclick="openServiceModal()" class="inline-flex items-center space-x-1.5 px-4 py-2 text-xs font-semibold rounded-full bg-[#D63333] text-white hover:bg-red-700 transition shadow-sm">
@@ -440,10 +401,10 @@
                 </button>
             </div>
 
-            <div class="p-3 rounded-2xl border border-neutral-200/80 dark:border-neutral-800 bg-white dark:bg-[#141414] flex flex-wrap items-center justify-between gap-3 text-xs">
+            <div class="p-3 rounded-2xl border border-neutral-200/80 bg-white flex flex-wrap items-center justify-between gap-3 text-xs">
                 <div class="flex items-center space-x-2">
                     <span class="text-neutral-500 font-medium">Filter Kendaraan:</span>
-                    <select id="serviceVehicleFilter" onchange="renderServiceLogs()" class="px-3 py-1 rounded-full border border-neutral-200 dark:border-neutral-800 bg-[#F6F7F9] dark:bg-neutral-900 text-[#141414] dark:text-white outline-none">
+                    <select id="serviceVehicleFilter" onchange="renderServiceLogs()" class="px-3 py-1 rounded-full border border-neutral-200 bg-[#F6F7F9] text-[#141414] outline-none">
                         <option value="ALL">Semua Kendaraan</option>
                     </select>
                 </div>
@@ -452,10 +413,10 @@
                 </div>
             </div>
 
-            <div class="border border-neutral-200/80 dark:border-neutral-800 rounded-2xl overflow-hidden bg-white dark:bg-[#141414] shadow-sm">
+            <div class="border border-neutral-200/80 rounded-2xl overflow-hidden bg-white shadow-sm">
                 <div class="overflow-x-auto">
                     <table class="w-full text-left text-xs">
-                        <thead class="bg-[#F6F7F9]/80 dark:bg-neutral-900/60 font-mono text-neutral-500 border-b border-neutral-200/80 dark:border-neutral-800">
+                        <thead class="bg-[#F6F7F9]/80 font-mono text-neutral-500 border-b border-neutral-200/80">
                             <tr>
                                 <th class="p-3.5">TANGGAL SERVIS</th>
                                 <th class="p-3.5">KENDARAAN</th>
@@ -467,7 +428,7 @@
                                 <th class="p-3.5 text-center">AKSI</th>
                             </tr>
                         </thead>
-                        <tbody id="serviceLogsTableBody" class="divide-y divide-neutral-100 dark:divide-neutral-800">
+                        <tbody id="serviceLogsTableBody" class="divide-y divide-neutral-100">
                         </tbody>
                     </table>
                 </div>
@@ -478,7 +439,7 @@
         <section id="sec-pajak" class="hidden space-y-6">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div>
-                    <h2 class="text-lg font-semibold tracking-tight text-[#141414] dark:text-white">Pengingat Pajak Kendaraan<span class="text-[#D63333]">.</span></h2>
+                    <h2 class="text-lg font-semibold tracking-tight text-[#141414]">Pengingat Pajak Kendaraan<span class="text-[#D63333]">.</span></h2>
                     <p class="text-xs text-neutral-500">Pantau tenggat waktu bayar Pajak Kendaraan Bermotor (PKB).</p>
                 </div>
                 <button onclick="openTaxModal()" class="inline-flex items-center space-x-1.5 px-4 py-2 text-xs font-semibold rounded-full bg-[#D63333] text-white hover:bg-red-700 transition shadow-sm">
@@ -495,7 +456,7 @@
         <section id="sec-sim" class="hidden space-y-6">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div>
-                    <h2 class="text-lg font-semibold tracking-tight text-[#141414] dark:text-white">Pengingat Perpanjangan SIM<span class="text-[#D63333]">.</span></h2>
+                    <h2 class="text-lg font-semibold tracking-tight text-[#141414]">Pengingat Perpanjangan SIM<span class="text-[#D63333]">.</span></h2>
                     <p class="text-xs text-neutral-500">Golongan SIM A, B1, B2, C, CI, CII, D, dan DI.</p>
                 </div>
                 <button onclick="openSimModal()" class="inline-flex items-center space-x-1.5 px-4 py-2 text-xs font-semibold rounded-full bg-[#D63333] text-white hover:bg-red-700 transition shadow-sm">
@@ -511,9 +472,9 @@
     </main>
 
     <!-- FOOTER -->
-    <footer class="mt-auto border-t border-neutral-200/80 dark:border-neutral-800 bg-white dark:bg-[#141414] py-6 text-xs text-neutral-500">
+    <footer class="mt-auto border-t border-neutral-200/80 bg-white py-6 text-xs text-neutral-500">
         <div class="max-w-7xl mx-auto px-4 sm:px-8 flex flex-col items-center justify-center text-center space-y-1.5">
-            <div class="font-medium text-neutral-600 dark:text-neutral-400">
+            <div class="font-medium text-neutral-600">
                 © 2026 Garasiku<span class="text-[#D63333]">.</span> by DikodeWorks<span class="text-[#D63333]">.</span> All rights reserved.
             </div>
             <div class="text-neutral-400 text-[11px]">
@@ -524,14 +485,14 @@
 
     <!-- MODAL PENGATURAN -->
     <div id="settingsModal" class="hidden fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
-        <div class="bg-white dark:bg-[#141414] border border-neutral-200 dark:border-neutral-800 rounded-2xl max-w-lg w-full p-6 space-y-5 shadow-2xl max-h-[90vh] overflow-y-auto">
-            <div class="flex justify-between items-center border-b border-neutral-100 dark:border-neutral-800 pb-3">
-                <h3 class="text-base font-semibold text-[#141414] dark:text-white">Pengaturan & Backup Data<span class="text-[#D63333]">.</span></h3>
-                <button onclick="closeSettingsModal()" class="text-neutral-400 hover:text-[#141414] dark:hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
+        <div class="bg-white border border-neutral-200 rounded-2xl max-w-lg w-full p-6 space-y-5 shadow-2xl max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center border-b border-neutral-100 pb-3">
+                <h3 class="text-base font-semibold text-[#141414]">Pengaturan & Backup Data<span class="text-[#D63333]">.</span></h3>
+                <button onclick="closeSettingsModal()" class="text-neutral-400 hover:text-[#141414]"><i data-lucide="x" class="w-5 h-5"></i></button>
             </div>
 
-            <div class="p-4 rounded-xl bg-neutral-50 dark:bg-neutral-900 border border-neutral-200/60 dark:border-neutral-800 text-xs space-y-2">
-                <div class="flex items-center space-x-2 font-semibold text-[#141414] dark:text-white">
+            <div class="p-4 rounded-xl bg-neutral-50 border border-neutral-200/60 text-xs space-y-2">
+                <div class="flex items-center space-x-2 font-semibold text-[#141414]">
                     <i data-lucide="info" class="w-4 h-4 text-[#D63333]"></i>
                     <span>Maksud & Fitur Aplikasi</span>
                 </div>
@@ -542,7 +503,7 @@
 
             <div class="space-y-3 pt-1" id="installSection">
                 <h4 class="text-xs font-semibold uppercase tracking-wider text-neutral-400">Pasang Aplikasi (PWA)</h4>
-                <div class="p-4 rounded-xl border border-neutral-200 dark:border-neutral-800 text-xs space-y-3">
+                <div class="p-4 rounded-xl border border-neutral-200 text-xs space-y-3">
                     <p id="installStatus" class="text-neutral-500 leading-relaxed"></p>
                     <button id="installBtn" onclick="promptInstall()" class="hidden w-full inline-flex items-center justify-center space-x-2 py-2 rounded-full bg-[#D63333] text-white font-semibold hover:bg-red-700 transition">
                         <i data-lucide="download" class="w-4 h-4"></i>
@@ -556,17 +517,17 @@
             <div class="space-y-3 pt-1">
                 <h4 class="text-xs font-semibold uppercase tracking-wider text-neutral-400">Manajemen Data JSON</h4>
                 <div class="grid grid-cols-2 gap-3">
-                    <button onclick="exportData()" class="flex items-center justify-center space-x-2 p-3 rounded-xl border border-neutral-200 dark:border-neutral-800 hover:bg-neutral-50 dark:hover:bg-neutral-800 text-xs font-semibold">
+                    <button onclick="exportData()" class="flex items-center justify-center space-x-2 p-3 rounded-xl border border-neutral-200 hover:bg-neutral-50 text-xs font-semibold">
                         <i data-lucide="download" class="w-4 h-4 text-[#D63333]"></i>
                         <span>Export Backup JSON</span>
                     </button>
-                    <label class="flex items-center justify-center space-x-2 p-3 rounded-xl border border-neutral-200 dark:border-neutral-800 hover:bg-neutral-50 dark:hover:bg-neutral-800 text-xs font-semibold cursor-pointer">
+                    <label class="flex items-center justify-center space-x-2 p-3 rounded-xl border border-neutral-200 hover:bg-neutral-50 text-xs font-semibold cursor-pointer">
                         <i data-lucide="upload" class="w-4 h-4 text-emerald-600"></i>
                         <span>Import Backup JSON</span>
                         <input type="file" id="importFileInput" accept=".json" class="hidden" onchange="importData(event)">
                     </label>
                 </div>
-                <button onclick="loadSampleData()" class="w-full py-2 text-xs font-medium text-neutral-500 hover:text-[#141414] dark:hover:text-white underline text-center">
+                <button onclick="loadSampleData()" class="w-full py-2 text-xs font-medium text-neutral-500 hover:text-[#141414] underline text-center">
                     Muat Ulang Data Sampel (Reset Data Demo)
                 </button>
                 <button onclick="clearAllData()" class="w-full py-2 text-xs font-medium text-red-600 hover:text-red-700 underline text-center">
@@ -574,44 +535,44 @@
                 </button>
             </div>
 
-            <div class="pt-2 border-t border-neutral-100 dark:border-neutral-800 flex justify-end">
-                <button onclick="closeSettingsModal()" class="px-4 py-1.5 rounded-full bg-[#141414] text-white dark:bg-white dark:text-[#141414] text-xs font-semibold">Tutup</button>
+            <div class="pt-2 border-t border-neutral-100 flex justify-end">
+                <button onclick="closeSettingsModal()" class="px-4 py-1.5 rounded-full bg-[#141414] text-white text-xs font-semibold">Tutup</button>
             </div>
         </div>
     </div>
 
     <!-- MODAL: KENDARAAN -->
     <div id="vehicleModal" class="hidden fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
-        <div class="bg-white dark:bg-[#141414] border border-neutral-200 dark:border-neutral-800 rounded-2xl max-w-md w-full p-6 space-y-4 shadow-xl">
-            <div class="flex justify-between items-center border-b border-neutral-100 dark:border-neutral-800 pb-3">
-                <h3 id="vehicleModalTitle" class="text-base font-semibold text-[#141414] dark:text-white">Tambah Kendaraan</h3>
-                <button onclick="closeVehicleModal()" class="text-neutral-400 hover:text-[#141414] dark:hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
+        <div class="bg-white border border-neutral-200 rounded-2xl max-w-md w-full p-6 space-y-4 shadow-xl">
+            <div class="flex justify-between items-center border-b border-neutral-100 pb-3">
+                <h3 id="vehicleModalTitle" class="text-base font-semibold text-[#141414]">Tambah Kendaraan</h3>
+                <button onclick="closeVehicleModal()" class="text-neutral-400 hover:text-[#141414]"><i data-lucide="x" class="w-5 h-5"></i></button>
             </div>
             <form id="vehicleForm" onsubmit="saveVehicle(event)" class="space-y-3 text-xs">
                 <input type="hidden" id="vehId">
                 <div>
                     <label class="block font-medium mb-1">Label Kendaraan</label>
-                    <input type="text" id="vehLabel" placeholder="misal: Motor Utamaku / Mobil Keluarga" required class="w-full p-2.5 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-[#F6F7F9] dark:bg-neutral-900 text-[#141414] dark:text-white outline-none">
+                    <input type="text" id="vehLabel" placeholder="misal: Motor Utamaku / Mobil Keluarga" required class="w-full p-2.5 rounded-xl border border-neutral-200 bg-[#F6F7F9] text-[#141414] outline-none">
                 </div>
                 <div>
                     <label class="block font-medium mb-1">Merk & Model</label>
-                    <input type="text" id="vehModel" placeholder="misal: Honda Beat 2023 / Toyota Avanza" required class="w-full p-2.5 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-[#F6F7F9] dark:bg-neutral-900 text-[#141414] dark:text-white outline-none">
+                    <input type="text" id="vehModel" placeholder="misal: Honda Beat 2023 / Toyota Avanza" required class="w-full p-2.5 rounded-xl border border-neutral-200 bg-[#F6F7F9] text-[#141414] outline-none">
                 </div>
                 <div class="grid grid-cols-2 gap-3">
                     <div>
                         <label class="block font-medium mb-1">Tipe Kendaraan</label>
-                        <select id="vehType" class="w-full p-2.5 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-[#F6F7F9] dark:bg-neutral-900 text-[#141414] dark:text-white outline-none">
+                        <select id="vehType" class="w-full p-2.5 rounded-xl border border-neutral-200 bg-[#F6F7F9] text-[#141414] outline-none">
                             <option value="Roda 2">Roda 2 (Motor)</option>
                             <option value="Roda 4">Roda 4 (Mobil)</option>
                         </select>
                     </div>
                     <div>
                         <label class="block font-medium mb-1">Plat Nomor</label>
-                        <input type="text" id="vehPlate" placeholder="B 1234 XYZ" class="w-full p-2.5 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-[#F6F7F9] dark:bg-neutral-900 text-[#141414] dark:text-white outline-none uppercase font-mono">
+                        <input type="text" id="vehPlate" placeholder="B 1234 XYZ" class="w-full p-2.5 rounded-xl border border-neutral-200 bg-[#F6F7F9] text-[#141414] outline-none uppercase font-mono">
                     </div>
                 </div>
                 <div class="pt-3 flex justify-end space-x-2">
-                    <button type="button" onclick="closeVehicleModal()" class="px-4 py-2 rounded-full border border-neutral-200 dark:border-neutral-800">Batal</button>
+                    <button type="button" onclick="closeVehicleModal()" class="px-4 py-2 rounded-full border border-neutral-200">Batal</button>
                     <button type="submit" class="px-5 py-2 rounded-full bg-[#D63333] text-white font-semibold">Simpan Kendaraan</button>
                 </div>
             </form>
@@ -620,32 +581,32 @@
 
     <!-- MODAL: SERVIS -->
     <div id="serviceModal" class="hidden fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
-        <div class="bg-white dark:bg-[#141414] border border-neutral-200 dark:border-neutral-800 rounded-2xl max-w-lg w-full p-6 space-y-4 shadow-xl max-h-[90vh] overflow-y-auto">
-            <div class="flex justify-between items-center border-b border-neutral-100 dark:border-neutral-800 pb-3">
-                <h3 id="serviceModalTitle" class="text-base font-semibold text-[#141414] dark:text-white">Catat Servis Kendaraan</h3>
-                <button onclick="closeServiceModal()" class="text-neutral-400 hover:text-[#141414] dark:hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
+        <div class="bg-white border border-neutral-200 rounded-2xl max-w-lg w-full p-6 space-y-4 shadow-xl max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center border-b border-neutral-100 pb-3">
+                <h3 id="serviceModalTitle" class="text-base font-semibold text-[#141414]">Catat Servis Kendaraan</h3>
+                <button onclick="closeServiceModal()" class="text-neutral-400 hover:text-[#141414]"><i data-lucide="x" class="w-5 h-5"></i></button>
             </div>
             <form id="serviceForm" onsubmit="saveServiceLog(event)" class="space-y-3 text-xs">
                 <input type="hidden" id="srvId">
                 <div>
                     <label class="block font-medium mb-1">Pilih Kendaraan</label>
-                    <select id="srvVehicleId" required onchange="autoCalcNextServiceDate()" class="w-full p-2.5 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-[#F6F7F9] dark:bg-neutral-900 text-[#141414] dark:text-white outline-none">
+                    <select id="srvVehicleId" required onchange="autoCalcNextServiceDate()" class="w-full p-2.5 rounded-xl border border-neutral-200 bg-[#F6F7F9] text-[#141414] outline-none">
                     </select>
                 </div>
                 <div class="grid grid-cols-2 gap-3">
                     <div>
                         <label class="block font-medium mb-1">Tanggal Servis</label>
-                        <input type="date" id="srvDate" required class="w-full p-2.5 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-[#F6F7F9] dark:bg-neutral-900 text-[#141414] dark:text-white outline-none" onchange="autoCalcNextServiceDate()">
+                        <input type="date" id="srvDate" required class="w-full p-2.5 rounded-xl border border-neutral-200 bg-[#F6F7F9] text-[#141414] outline-none" onchange="autoCalcNextServiceDate()">
                     </div>
                     <div>
                         <label class="block font-medium mb-1">Odometer (KM)</label>
-                        <input type="number" id="srvOdometer" placeholder="15400" required oninput="autoCalcNextServiceDate()" class="w-full p-2.5 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-[#F6F7F9] dark:bg-neutral-900 text-[#141414] dark:text-white font-mono outline-none">
+                        <input type="number" id="srvOdometer" placeholder="15400" required oninput="autoCalcNextServiceDate()" class="w-full p-2.5 rounded-xl border border-neutral-200 bg-[#F6F7F9] text-[#141414] font-mono outline-none">
                     </div>
                 </div>
                 <div>
                     <div class="flex items-center justify-between mb-1">
                         <label class="block font-medium">Jenis Pekerjaan</label>
-                        <button type="button" onclick="addServiceItemRow('task')" class="inline-flex items-center space-x-1 px-2.5 py-1 rounded-full border border-neutral-200 dark:border-neutral-700 text-[10px] font-semibold hover:bg-neutral-50 dark:hover:bg-neutral-800 transition">
+                        <button type="button" onclick="addServiceItemRow('task')" class="inline-flex items-center space-x-1 px-2.5 py-1 rounded-full border border-neutral-200 text-[10px] font-semibold hover:bg-neutral-50 transition">
                             <i data-lucide="plus" class="w-3 h-3"></i>
                             <span>Tambah</span>
                         </button>
@@ -656,7 +617,7 @@
                 <div>
                     <div class="flex items-center justify-between mb-1">
                         <label class="block font-medium">Suku Cadang Diganti</label>
-                        <button type="button" onclick="addServiceItemRow('part')" class="inline-flex items-center space-x-1 px-2.5 py-1 rounded-full border border-neutral-200 dark:border-neutral-700 text-[10px] font-semibold hover:bg-neutral-50 dark:hover:bg-neutral-800 transition">
+                        <button type="button" onclick="addServiceItemRow('part')" class="inline-flex items-center space-x-1 px-2.5 py-1 rounded-full border border-neutral-200 text-[10px] font-semibold hover:bg-neutral-50 transition">
                             <i data-lucide="plus" class="w-3 h-3"></i>
                             <span>Tambah</span>
                         </button>
@@ -667,28 +628,28 @@
                 <div class="grid grid-cols-2 gap-3">
                     <div>
                         <label class="block font-medium mb-1">Lokasi Bengkel</label>
-                        <input type="text" id="srvLocation" placeholder="AHASS Kebayoran" class="w-full p-2.5 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-[#F6F7F9] dark:bg-neutral-900 text-[#141414] dark:text-white outline-none">
+                        <input type="text" id="srvLocation" placeholder="AHASS Kebayoran" class="w-full p-2.5 rounded-xl border border-neutral-200 bg-[#F6F7F9] text-[#141414] outline-none">
                     </div>
                     <div>
                         <label class="block font-medium mb-1">Total Biaya (Rp)</label>
-                        <input type="number" id="srvCost" readonly class="w-full p-2.5 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-neutral-100 dark:bg-neutral-800 text-[#141414] dark:text-white font-mono outline-none cursor-not-allowed" placeholder="0">
+                        <input type="number" id="srvCost" readonly class="w-full p-2.5 rounded-xl border border-neutral-200 bg-neutral-100 text-[#141414] font-mono outline-none cursor-not-allowed" placeholder="0">
                         <p class="text-[10px] text-neutral-400 mt-1">Otomatis dari total sub biaya.</p>
                     </div>
                 </div>
                 <div class="grid grid-cols-2 gap-3">
                     <div>
                         <label class="block font-medium mb-1">Estimasi Servis Berikutnya</label>
-                        <input type="date" id="srvNextDate" required class="w-full p-2.5 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-[#F6F7F9] dark:bg-neutral-900 text-[#141414] dark:text-white outline-none">
+                        <input type="date" id="srvNextDate" required class="w-full p-2.5 rounded-xl border border-neutral-200 bg-[#F6F7F9] text-[#141414] outline-none">
                     </div>
                     <div>
                         <label class="block font-medium mb-1">Servis Berikutnya (KM)</label>
-                        <input type="number" id="srvNextOdometer" readonly class="w-full p-2.5 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-neutral-100 dark:bg-neutral-800 text-[#141414] dark:text-white font-mono outline-none cursor-not-allowed" placeholder="0">
+                        <input type="number" id="srvNextOdometer" readonly class="w-full p-2.5 rounded-xl border border-neutral-200 bg-neutral-100 text-[#141414] font-mono outline-none cursor-not-allowed" placeholder="0">
                     </div>
                 </div>
                 <p id="srvIntervalHint" class="text-[10px] text-neutral-400">Interval servis: Roda 2 tiap 2.000 KM / 2 bulan, Roda 4 tiap 5.000 KM / 3 bulan.</p>
 
                 <div class="pt-3 flex justify-end space-x-2">
-                    <button type="button" onclick="closeServiceModal()" class="px-4 py-2 rounded-full border border-neutral-200 dark:border-neutral-800">Batal</button>
+                    <button type="button" onclick="closeServiceModal()" class="px-4 py-2 rounded-full border border-neutral-200">Batal</button>
                     <button type="submit" class="px-5 py-2 rounded-full bg-[#D63333] text-white font-semibold">Simpan Riwayat</button>
                 </div>
             </form>
@@ -697,33 +658,33 @@
 
     <!-- MODAL: PAJAK -->
     <div id="taxModal" class="hidden fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
-        <div class="bg-white dark:bg-[#141414] border border-neutral-200 dark:border-neutral-800 rounded-2xl max-w-md w-full p-6 space-y-4 shadow-xl">
-            <div class="flex justify-between items-center border-b border-neutral-100 dark:border-neutral-800 pb-3">
-                <h3 id="taxModalTitle" class="text-base font-semibold text-[#141414] dark:text-white">Atur Pajak Kendaraan</h3>
-                <button onclick="closeTaxModal()" class="text-neutral-400 hover:text-[#141414] dark:hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
+        <div class="bg-white border border-neutral-200 rounded-2xl max-w-md w-full p-6 space-y-4 shadow-xl">
+            <div class="flex justify-between items-center border-b border-neutral-100 pb-3">
+                <h3 id="taxModalTitle" class="text-base font-semibold text-[#141414]">Atur Pajak Kendaraan</h3>
+                <button onclick="closeTaxModal()" class="text-neutral-400 hover:text-[#141414]"><i data-lucide="x" class="w-5 h-5"></i></button>
             </div>
             <form id="taxForm" onsubmit="saveTaxRecord(event)" class="space-y-3 text-xs">
                 <input type="hidden" id="taxId">
                 <div>
                     <label class="block font-medium mb-1">Pilih Kendaraan</label>
-                    <select id="taxVehicleId" required class="w-full p-2.5 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-[#F6F7F9] dark:bg-neutral-900 text-[#141414] dark:text-white outline-none">
+                    <select id="taxVehicleId" required class="w-full p-2.5 rounded-xl border border-neutral-200 bg-[#F6F7F9] text-[#141414] outline-none">
                     </select>
                 </div>
                 <div>
                     <label class="block font-medium mb-1">Tanggal Bayar Pajak Terakhir</label>
-                    <input type="date" id="taxLastDate" required class="w-full p-2.5 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-[#F6F7F9] dark:bg-neutral-900 text-[#141414] dark:text-white outline-none" onchange="autoCalcTaxDueDate()">
+                    <input type="date" id="taxLastDate" required class="w-full p-2.5 rounded-xl border border-neutral-200 bg-[#F6F7F9] text-[#141414] outline-none" onchange="autoCalcTaxDueDate()">
                 </div>
                 <div>
                     <label class="block font-medium mb-1">Jatuh Tempo Berikutnya (+1 Tahun)</label>
-                    <input type="date" id="taxDueDate" required class="w-full p-2.5 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-[#F6F7F9] dark:bg-neutral-900 text-[#141414] dark:text-white outline-none">
+                    <input type="date" id="taxDueDate" required class="w-full p-2.5 rounded-xl border border-neutral-200 bg-[#F6F7F9] text-[#141414] outline-none">
                 </div>
                 <div>
                     <label class="block font-medium mb-1">Nominal Pajak PKB (Rp)</label>
-                    <input type="number" id="taxAmount" placeholder="350000" class="w-full p-2.5 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-[#F6F7F9] dark:bg-neutral-900 text-[#141414] dark:text-white font-mono outline-none">
+                    <input type="number" id="taxAmount" placeholder="350000" class="w-full p-2.5 rounded-xl border border-neutral-200 bg-[#F6F7F9] text-[#141414] font-mono outline-none">
                 </div>
 
                 <div class="pt-3 flex justify-end space-x-2">
-                    <button type="button" onclick="closeTaxModal()" class="px-4 py-2 rounded-full border border-neutral-200 dark:border-neutral-800">Batal</button>
+                    <button type="button" onclick="closeTaxModal()" class="px-4 py-2 rounded-full border border-neutral-200">Batal</button>
                     <button type="submit" class="px-5 py-2 rounded-full bg-[#D63333] text-white font-semibold">Simpan Pajak</button>
                 </div>
             </form>
@@ -732,16 +693,16 @@
 
     <!-- MODAL: SIM -->
     <div id="simModal" class="hidden fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
-        <div class="bg-white dark:bg-[#141414] border border-neutral-200 dark:border-neutral-800 rounded-2xl max-w-md w-full p-6 space-y-4 shadow-xl">
-            <div class="flex justify-between items-center border-b border-neutral-100 dark:border-neutral-800 pb-3">
-                <h3 id="simModalTitle" class="text-base font-semibold text-[#141414] dark:text-white">Atur Masa SIM</h3>
-                <button onclick="closeSimModal()" class="text-neutral-400 hover:text-[#141414] dark:hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
+        <div class="bg-white border border-neutral-200 rounded-2xl max-w-md w-full p-6 space-y-4 shadow-xl">
+            <div class="flex justify-between items-center border-b border-neutral-100 pb-3">
+                <h3 id="simModalTitle" class="text-base font-semibold text-[#141414]">Atur Masa SIM</h3>
+                <button onclick="closeSimModal()" class="text-neutral-400 hover:text-[#141414]"><i data-lucide="x" class="w-5 h-5"></i></button>
             </div>
             <form id="simForm" onsubmit="saveSimRecord(event)" class="space-y-3 text-xs">
                 <input type="hidden" id="simId">
                 <div>
                     <label class="block font-medium mb-1">Golongan SIM</label>
-                    <select id="simType" required class="w-full p-2.5 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-[#F6F7F9] dark:bg-neutral-900 text-[#141414] dark:text-white font-semibold outline-none">
+                    <select id="simType" required class="w-full p-2.5 rounded-xl border border-neutral-200 bg-[#F6F7F9] text-[#141414] font-semibold outline-none">
                         <option value="SIM A">SIM A (Mobil Penumpang/Barang)</option>
                         <option value="SIM B1">SIM B1 (Mobil Bus/Barang > 3.500 kg)</option>
                         <option value="SIM B2">SIM B2 (Alat Berat/Truk Gandeng)</option>
@@ -754,19 +715,19 @@
                 </div>
                 <div>
                     <label class="block font-medium mb-1">Nama Pemilik SIM</label>
-                    <input type="text" id="simOwner" placeholder="Nama sesuai SIM" class="w-full p-2.5 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-[#F6F7F9] dark:bg-neutral-900 text-[#141414] dark:text-white outline-none">
+                    <input type="text" id="simOwner" placeholder="Nama sesuai SIM" class="w-full p-2.5 rounded-xl border border-neutral-200 bg-[#F6F7F9] text-[#141414] outline-none">
                 </div>
                 <div>
                     <label class="block font-medium mb-1">Tanggal Terbit / Perpanjang Lalu</label>
-                    <input type="date" id="simIssueDate" required class="w-full p-2.5 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-[#F6F7F9] dark:bg-neutral-900 text-[#141414] dark:text-white outline-none" onchange="autoCalcSimExpiryDate()">
+                    <input type="date" id="simIssueDate" required class="w-full p-2.5 rounded-xl border border-neutral-200 bg-[#F6F7F9] text-[#141414] outline-none" onchange="autoCalcSimExpiryDate()">
                 </div>
                 <div>
                     <label class="block font-medium mb-1">Masa Kadaluarsa SIM (+5 Tahun)</label>
-                    <input type="date" id="simExpiryDate" required class="w-full p-2.5 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-[#F6F7F9] dark:bg-neutral-900 text-[#141414] dark:text-white outline-none">
+                    <input type="date" id="simExpiryDate" required class="w-full p-2.5 rounded-xl border border-neutral-200 bg-[#F6F7F9] text-[#141414] outline-none">
                 </div>
 
                 <div class="pt-3 flex justify-end space-x-2">
-                    <button type="button" onclick="closeSimModal()" class="px-4 py-2 rounded-full border border-neutral-200 dark:border-neutral-800">Batal</button>
+                    <button type="button" onclick="closeSimModal()" class="px-4 py-2 rounded-full border border-neutral-200">Batal</button>
                     <button type="submit" class="px-5 py-2 rounded-full bg-[#D63333] text-white font-semibold">Simpan SIM</button>
                 </div>
             </form>
@@ -774,22 +735,22 @@
     </div>
 
     <!-- BANNER PASANG APLIKASI -->
-    <div id="installBanner" class="hidden fixed left-4 right-4 sm:left-auto sm:right-6 sm:max-w-sm z-40 rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-[#141414] shadow-xl p-4 text-xs" style="bottom: calc(1rem + env(safe-area-inset-bottom));">
+    <div id="installBanner" class="hidden fixed left-4 right-4 sm:left-auto sm:right-6 sm:max-w-sm z-40 rounded-2xl border border-neutral-200 bg-white shadow-xl p-4 text-xs" style="bottom: calc(1rem + env(safe-area-inset-bottom));">
         <div class="flex items-start gap-3">
             <img src="icons/icon-192.png" alt="" width="40" height="40" class="w-10 h-10 rounded-xl shrink-0">
             <div class="flex-1 min-w-0">
-                <div class="font-semibold text-[#141414] dark:text-white">Pasang Garasiku</div>
+                <div class="font-semibold text-[#141414]">Pasang Garasiku</div>
                 <p id="installBannerText" class="text-neutral-500 mt-0.5 leading-relaxed">Buka cepat dari layar utama dan pakai tanpa internet.</p>
                 <div class="flex items-center gap-2 mt-3">
                     <button id="installBannerBtn" onclick="promptInstall()" class="px-3 py-1.5 rounded-full bg-[#D63333] text-white font-semibold">Pasang</button>
-                    <button onclick="dismissInstallBanner()" class="px-3 py-1.5 rounded-full border border-neutral-200 dark:border-neutral-700">Nanti</button>
+                    <button onclick="dismissInstallBanner()" class="px-3 py-1.5 rounded-full border border-neutral-200">Nanti</button>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- TOAST VERSI BARU -->
-    <div id="updateToast" class="hidden fixed left-4 right-4 sm:left-auto sm:right-6 sm:max-w-sm z-50 rounded-2xl bg-[#141414] text-white dark:bg-white dark:text-[#141414] shadow-xl px-4 py-3 text-xs flex items-center justify-between gap-3" style="bottom: calc(1rem + env(safe-area-inset-bottom));">
+    <div id="updateToast" class="hidden fixed left-4 right-4 sm:left-auto sm:right-6 sm:max-w-sm z-50 rounded-2xl bg-[#141414] text-white shadow-xl px-4 py-3 text-xs flex items-center justify-between gap-3" style="bottom: calc(1rem + env(safe-area-inset-bottom));">
         <span>Versi baru Garasiku tersedia.</span>
         <button onclick="applyUpdate()" class="px-3 py-1.5 rounded-full bg-[#D63333] text-white font-semibold">Muat Ulang</button>
     </div>
@@ -797,7 +758,6 @@
     <!-- JAVASCRIPT APP LOGIC -->
     <script>
         const STORAGE_KEY = 'garasiku_pwa_data';
-        const THEME_KEY = 'garasiku_theme';
         const INSTALL_DISMISS_KEY = 'garasiku_install_dismissed';
         const APP_VERSION = '1.1.0';
         const WARN_DAYS = 30; // ambang "Segera" untuk pajak, SIM, dan servis (satu angka di semua tampilan)
@@ -1224,7 +1184,7 @@
             if (donutChartInstance) donutChartInstance.destroy();
 
             const dataValues = (aman === 0 && segera === 0 && terlewat === 0) ? [1] : [aman, segera, terlewat];
-            const colors = (aman === 0 && segera === 0 && terlewat === 0) ? [isDark() ? '#333333' : '#e5e5e5'] : ['#10b981', '#f59e0b', '#dc2626'];
+            const colors = (aman === 0 && segera === 0 && terlewat === 0) ? ['#e5e5e5'] : ['#10b981', '#f59e0b', '#dc2626'];
 
             donutChartInstance = new Chart(ctx, {
                 type: 'doughnut',
@@ -1234,7 +1194,7 @@
                         data: dataValues,
                         backgroundColor: colors,
                         borderWidth: 2,
-                        borderColor: isDark() ? '#141414' : '#ffffff',
+                        borderColor: '#ffffff',
                         hoverOffset: 4
                     }]
                 },
@@ -1291,8 +1251,8 @@
 
             if (barChartInstance) barChartInstance.destroy();
 
-            const textColor = isDark() ? '#a3a3a3' : '#666666';
-            const gridColor = isDark() ? '#262626' : '#e5e5e5';
+            const textColor = '#666666';
+            const gridColor = '#e5e5e5';
 
             const canvasCtx = ctx.getContext('2d');
             const gradient = canvasCtx.createLinearGradient(0, 0, 0, 200);
@@ -1312,7 +1272,7 @@
                         fill: true,
                         tension: 0.4,
                         pointBackgroundColor: '#D63333',
-                        pointBorderColor: isDark() ? '#141414' : '#ffffff',
+                        pointBorderColor: '#ffffff',
                         pointBorderWidth: 2,
                         pointRadius: monthsCount > 12 ? 3 : 4,
                         pointHoverRadius: 6
@@ -1324,10 +1284,10 @@
                     plugins: {
                         legend: { display: false },
                         tooltip: {
-                            backgroundColor: isDark() ? '#1f1f1f' : '#ffffff',
-                            titleColor: isDark() ? '#f5f5f5' : '#141414',
+                            backgroundColor: '#ffffff',
+                            titleColor: '#141414',
                             bodyColor: '#D63333',
-                            borderColor: isDark() ? '#333333' : '#e5e5e5',
+                            borderColor: '#e5e5e5',
                             borderWidth: 1,
                             padding: 10,
                             displayColors: false,
@@ -1456,13 +1416,13 @@
             tbody.innerHTML = items.map(item => {
                 let statusBadge = '';
                 if (item.status === 'TERLEWAT') {
-                    statusBadge = `<span class="inline-flex items-center space-x-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold whitespace-nowrap bg-red-100 text-red-800 dark:bg-red-950 dark:text-red-300"><span class="w-1.5 h-1.5 rounded-full bg-red-600"></span><span>Terlewat (${Math.abs(item.diff)} hr)</span></span>`;
+                    statusBadge = `<span class="inline-flex items-center space-x-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold whitespace-nowrap bg-red-100 text-red-800"><span class="w-1.5 h-1.5 rounded-full bg-red-600"></span><span>Terlewat (${Math.abs(item.diff)} hr)</span></span>`;
                 } else if (item.status === 'SEGERA') {
-                    statusBadge = `<span class="inline-flex items-center space-x-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold whitespace-nowrap bg-amber-100 text-amber-900 dark:bg-amber-950 dark:text-amber-200"><span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span><span>Segera (${item.diff} hr)</span></span>`;
+                    statusBadge = `<span class="inline-flex items-center space-x-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold whitespace-nowrap bg-amber-100 text-amber-900"><span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span><span>Segera (${item.diff} hr)</span></span>`;
                 } else if (item.status === 'RIWAYAT') {
-                    statusBadge = `<span class="inline-flex items-center space-x-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold whitespace-nowrap bg-neutral-100 text-neutral-600 dark:bg-neutral-800 dark:text-neutral-300"><span class="w-1.5 h-1.5 rounded-full bg-neutral-400"></span><span>Riwayat</span></span>`;
+                    statusBadge = `<span class="inline-flex items-center space-x-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold whitespace-nowrap bg-neutral-100 text-neutral-600"><span class="w-1.5 h-1.5 rounded-full bg-neutral-400"></span><span>Riwayat</span></span>`;
                 } else {
-                    statusBadge = `<span class="inline-flex items-center space-x-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold whitespace-nowrap bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span><span>Aman (${item.diff} hr)</span></span>`;
+                    statusBadge = `<span class="inline-flex items-center space-x-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold whitespace-nowrap bg-emerald-100 text-emerald-800"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span><span>Aman (${item.diff} hr)</span></span>`;
                 }
 
                 const dateCell = item.status === 'RIWAYAT'
@@ -1470,17 +1430,17 @@
                     : `<div class="font-mono font-semibold">${formatIndoDate(item.dueDate)}</div>`;
 
                 return `
-                    <tr class="hover:bg-neutral-50 dark:hover:bg-neutral-900/40 transition">
+                    <tr class="hover:bg-neutral-50 transition">
                         <td class="py-3 px-4 align-top font-mono text-[11px] font-bold text-neutral-500 whitespace-nowrap">${item.kategori}</td>
-                        <td class="py-3 px-4 align-top font-semibold text-[#141414] dark:text-white">${esc(item.title)}</td>
+                        <td class="py-3 px-4 align-top font-semibold text-[#141414]">${esc(item.title)}</td>
                         <td class="py-3 px-4 align-top">
                             <div class="text-neutral-500 min-w-[200px] max-w-[420px] whitespace-normal break-words leading-relaxed">${esc(item.detail)}</div>
                         </td>
                         <td class="py-3 px-4 align-top whitespace-nowrap">${statusBadge}</td>
                         <td class="py-3 px-4 align-top whitespace-nowrap">${dateCell}</td>
                         <td class="py-3 px-4 text-center">
-                            ${item.status === 'RIWAYAT' ? '<span class="text-neutral-300 dark:text-neutral-600">—</span>' : `
-                            <a href="${item.gcalUrl}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center space-x-1 px-3 py-1 rounded-full border border-neutral-200 dark:border-neutral-700 text-[11px] font-medium hover:bg-neutral-100 dark:hover:bg-neutral-800 transition">
+                            ${item.status === 'RIWAYAT' ? '<span class="text-neutral-300">—</span>' : `
+                            <a href="${item.gcalUrl}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center space-x-1 px-3 py-1 rounded-full border border-neutral-200 text-[11px] font-medium hover:bg-neutral-100 transition">
                                 <i data-lucide="calendar-plus" class="w-3.5 h-3.5 text-[#D63333]"></i>
                                 <span>+GCal</span>
                             </a>`}
@@ -1496,7 +1456,7 @@
             const grid = document.getElementById('vehiclesGrid');
             if (appData.vehicles.length === 0) {
                 grid.innerHTML = `
-                    <div class="col-span-full py-12 text-center border border-dashed border-neutral-300 dark:border-neutral-700 rounded-2xl">
+                    <div class="col-span-full py-12 text-center border border-dashed border-neutral-300 rounded-2xl">
                         <i data-lucide="car" class="w-8 h-8 mx-auto text-neutral-400 mb-2"></i>
                         <p class="text-xs text-neutral-500">Belum ada kendaraan yang terdaftar.</p>
                         <button onclick="openVehicleModal()" class="mt-3 px-4 py-1.5 text-xs font-semibold rounded-full bg-[#D63333] text-white">Tambah Kendaraan Pertama</button>
@@ -1511,36 +1471,36 @@
                 const taxRec = appData.taxRecords.find(t => t.vehicleId === v.id);
 
                 return `
-                    <div class="p-5 rounded-2xl border border-neutral-200/80 dark:border-neutral-800 bg-white dark:bg-[#141414] shadow-sm flex flex-col justify-between space-y-4">
+                    <div class="p-5 rounded-2xl border border-neutral-200/80 bg-white shadow-sm flex flex-col justify-between space-y-4">
                         <div>
                             <div class="flex items-start justify-between">
-                                <span class="text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300">
+                                <span class="text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-neutral-100 text-neutral-600">
                                     ${esc(v.label)}
                                 </span>
-                                <span class="text-xs font-semibold font-mono border border-neutral-200 dark:border-neutral-800 px-2.5 py-0.5 rounded-full">
+                                <span class="text-xs font-semibold font-mono border border-neutral-200 px-2.5 py-0.5 rounded-full">
                                     ${esc(v.type)}
                                 </span>
                             </div>
-                            <h3 class="text-base font-semibold text-[#141414] dark:text-white mt-3">${esc(v.model)}</h3>
+                            <h3 class="text-base font-semibold text-[#141414] mt-3">${esc(v.model)}</h3>
                             <p class="text-xs font-mono text-neutral-500">${esc(v.plate || 'No Plat -')}</p>
                         </div>
 
-                        <div class="pt-3 border-t border-neutral-100 dark:border-neutral-800 text-xs space-y-1.5">
+                        <div class="pt-3 border-t border-neutral-100 text-xs space-y-1.5">
                             <div class="flex justify-between text-neutral-500">
                                 <span>Total Riwayat Servis:</span>
-                                <span class="font-mono font-bold text-[#141414] dark:text-white">${logsCount} catatan</span>
+                                <span class="font-mono font-bold text-[#141414]">${logsCount} catatan</span>
                             </div>
                             <div class="flex justify-between text-neutral-500">
                                 <span>Pajak Jatuh Tempo:</span>
-                                <span class="font-mono font-bold ${taxRec ? 'text-[#141414] dark:text-white' : 'text-neutral-400'}">
+                                <span class="font-mono font-bold ${taxRec ? 'text-[#141414] ' : 'text-neutral-400'}">
                                     ${taxRec ? formatIndoDate(taxRec.dueDate) : 'Belum diatur'}
                                 </span>
                             </div>
                         </div>
 
-                        <div class="flex justify-end space-x-2 pt-2 border-t border-neutral-100 dark:border-neutral-800">
-                            <button onclick="editVehicle('${v.id}')" class="p-1.5 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-800 text-neutral-600 dark:text-neutral-300"><i data-lucide="edit-2" class="w-4 h-4"></i></button>
-                            <button onclick="deleteVehicle('${v.id}')" class="p-1.5 rounded-lg hover:bg-red-100 dark:hover:bg-red-950 text-red-600 dark:text-red-400"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                        <div class="flex justify-end space-x-2 pt-2 border-t border-neutral-100">
+                            <button onclick="editVehicle('${v.id}')" class="p-1.5 rounded-lg hover:bg-neutral-100 text-neutral-600"><i data-lucide="edit-2" class="w-4 h-4"></i></button>
+                            <button onclick="deleteVehicle('${v.id}')" class="p-1.5 rounded-lg hover:bg-red-100 text-red-600"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
                         </div>
                     </div>
                 `;
@@ -1624,8 +1584,8 @@
 
             const itemRow = (item) => `
                 <div class="flex items-baseline justify-between gap-4">
-                    <span class="text-[#141414] dark:text-neutral-100">${esc(item.name)}</span>
-                    <span class="font-mono text-[10px] text-neutral-500 dark:text-neutral-400 whitespace-nowrap">${item.cost === null ? '-' : formatRupiah(item.cost)}</span>
+                    <span class="text-[#141414]">${esc(item.name)}</span>
+                    <span class="font-mono text-[10px] text-neutral-500 whitespace-nowrap">${item.cost === null ? '-' : formatRupiah(item.cost)}</span>
                 </div>`;
 
             const section = (title, items) => items.length ? `
@@ -1658,10 +1618,10 @@
                 const gcalUrl = generateGoogleCalendarUrl(`Servis: ${veh ? veh.model : ''}`, `Bengkel: ${s.location||'-'}\nTerakhir Odo: ${s.odometer} KM`, s.nextDate);
 
                 return `
-                    <tr class="hover:bg-neutral-50 dark:hover:bg-neutral-900/40 transition">
-                        <td class="p-3.5 font-mono text-[#141414] dark:text-white">${formatIndoDate(s.date)}</td>
+                    <tr class="hover:bg-neutral-50 transition">
+                        <td class="p-3.5 font-mono text-[#141414]">${formatIndoDate(s.date)}</td>
                         <td class="p-3.5">
-                            <div class="font-semibold text-[#141414] dark:text-white">${esc(veh ? veh.model : 'Dihapus')}</div>
+                            <div class="font-semibold text-[#141414]">${esc(veh ? veh.model : 'Dihapus')}</div>
                             <div class="text-[10px] text-neutral-400 font-mono">${esc(veh ? veh.type + ' • ' + (veh.plate||'-') : '')}</div>
                         </td>
                         <td class="p-3.5 font-mono">${Number(s.odometer).toLocaleString('id-ID')} KM</td>
@@ -1669,13 +1629,13 @@
                             ${renderServiceItemsBreakdown(s)}
                         </td>
                         <td class="p-3.5 text-neutral-500">${esc(s.location || '-')}</td>
-                        <td class="p-3.5 text-right font-mono font-semibold text-[#141414] dark:text-white">${formatRupiah(s.cost)}</td>
-                        <td class="p-3.5 font-mono text-neutral-600 dark:text-neutral-300">
+                        <td class="p-3.5 text-right font-mono font-semibold text-[#141414]">${formatRupiah(s.cost)}</td>
+                        <td class="p-3.5 font-mono text-neutral-600">
                             <div>${formatIndoDate(s.nextDate)}</div>
                             ${s.nextOdometer ? `<div class="text-[10px] text-neutral-400">${Number(s.nextOdometer).toLocaleString('id-ID')} KM</div>` : ''}
                         </td>
                         <td class="p-3.5 text-center space-x-1">
-                            <a href="${gcalUrl}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center space-x-1 px-2.5 py-1 rounded-full border border-neutral-200 dark:border-neutral-700 text-[10px] hover:bg-neutral-100">
+                            <a href="${gcalUrl}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center space-x-1 px-2.5 py-1 rounded-full border border-neutral-200 text-[10px] hover:bg-neutral-100">
                                 <i data-lucide="calendar-plus" class="w-3 h-3 text-[#D63333]"></i>
                                 <span>+GCal</span>
                             </a>
@@ -1696,10 +1656,10 @@
             const row = document.createElement('div');
             row.className = 'service-item-row flex items-start gap-2';
             row.innerHTML = `
-                <input type="text" class="srv-item-name flex-1 min-w-0 p-2 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-[#F6F7F9] dark:bg-neutral-900 text-[#141414] dark:text-white outline-none" placeholder="${kind === 'part' ? 'misal: Oli Mesin MPX2' : 'misal: Servis Mesin berkala'}">
+                <input type="text" class="srv-item-name flex-1 min-w-0 p-2 rounded-xl border border-neutral-200 bg-[#F6F7F9] text-[#141414] outline-none" placeholder="${kind === 'part' ? 'misal: Oli Mesin MPX2' : 'misal: Servis Mesin berkala'}">
                 <div class="relative w-32 shrink-0">
                     <span class="absolute left-2 top-1/2 -translate-y-1/2 text-[10px] text-neutral-400 font-mono pointer-events-none">Rp</span>
-                    <input type="number" min="0" step="1" class="srv-item-cost w-full p-2 pl-7 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-[#F6F7F9] dark:bg-neutral-900 text-[#141414] dark:text-white font-mono outline-none" placeholder="0" oninput="updateServiceTotal()">
+                    <input type="number" min="0" step="1" class="srv-item-cost w-full p-2 pl-7 rounded-xl border border-neutral-200 bg-[#F6F7F9] text-[#141414] font-mono outline-none" placeholder="0" oninput="updateServiceTotal()">
                 </div>
                 <button type="button" onclick="removeServiceItemRow(this)" class="mt-1.5 p-1 rounded-lg text-neutral-400 hover:text-red-600 transition" title="Hapus baris">
                     <i data-lucide="x" class="w-4 h-4"></i>
@@ -1886,9 +1846,9 @@
 
                 let badgeHtml = '';
                 if (diffDays !== null) {
-                    if (diffDays < 0) badgeHtml = `<span class="px-2.5 py-0.5 rounded-full text-[10px] font-mono bg-red-100 text-red-800 dark:bg-red-950 dark:text-red-300">Terlewat ${Math.abs(diffDays)} Hr</span>`;
-                    else if (diffDays <= WARN_DAYS) badgeHtml = `<span class="px-2.5 py-0.5 rounded-full text-[10px] font-mono bg-amber-100 text-amber-900 dark:bg-amber-950 dark:text-amber-200">Segera (${diffDays} Hr)</span>`;
-                    else badgeHtml = `<span class="px-2.5 py-0.5 rounded-full text-[10px] font-mono bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">Sisa ${diffDays} Hr</span>`;
+                    if (diffDays < 0) badgeHtml = `<span class="px-2.5 py-0.5 rounded-full text-[10px] font-mono bg-red-100 text-red-800">Terlewat ${Math.abs(diffDays)} Hr</span>`;
+                    else if (diffDays <= WARN_DAYS) badgeHtml = `<span class="px-2.5 py-0.5 rounded-full text-[10px] font-mono bg-amber-100 text-amber-900">Segera (${diffDays} Hr)</span>`;
+                    else badgeHtml = `<span class="px-2.5 py-0.5 rounded-full text-[10px] font-mono bg-emerald-100 text-emerald-800">Sisa ${diffDays} Hr</span>`;
                 } else {
                     badgeHtml = `<span class="px-2.5 py-0.5 rounded-full text-[10px] font-mono bg-neutral-100 text-neutral-400">Belum Diset</span>`;
                 }
@@ -1896,39 +1856,39 @@
                 const gcalUrl = taxRec ? generateGoogleCalendarUrl(`Pajak PKB: ${v.model}`, `Estimasi Pajak: ${formatRupiah(taxRec.amount||0)}`, taxRec.dueDate) : '#';
 
                 return `
-                    <div class="p-5 rounded-2xl border border-neutral-200/80 dark:border-neutral-800 bg-white dark:bg-[#141414] shadow-sm flex flex-col justify-between space-y-4">
+                    <div class="p-5 rounded-2xl border border-neutral-200/80 bg-white shadow-sm flex flex-col justify-between space-y-4">
                         <div>
                             <div class="flex items-center justify-between">
                                 <span class="text-xs font-mono text-neutral-500">${esc(v.label)}</span>
                                 ${badgeHtml}
                             </div>
-                            <h3 class="text-base font-semibold text-[#141414] dark:text-white mt-2">${esc(v.model)}</h3>
+                            <h3 class="text-base font-semibold text-[#141414] mt-2">${esc(v.model)}</h3>
                             <p class="text-xs font-mono text-neutral-500">${esc(v.plate || 'No Plat -')} • ${esc(v.type)}</p>
                         </div>
 
-                        <div class="pt-3 border-t border-neutral-100 dark:border-neutral-800 text-xs space-y-1.5">
+                        <div class="pt-3 border-t border-neutral-100 text-xs space-y-1.5">
                             <div class="flex justify-between text-neutral-500">
                                 <span>Pajak Terakhir:</span>
-                                <span class="font-mono font-semibold text-[#141414] dark:text-white">${taxRec ? formatIndoDate(taxRec.lastDate) : '-'}</span>
+                                <span class="font-mono font-semibold text-[#141414]">${taxRec ? formatIndoDate(taxRec.lastDate) : '-'}</span>
                             </div>
                             <div class="flex justify-between text-neutral-500">
                                 <span>Jatuh Tempo (+1 Thn):</span>
-                                <span class="font-mono font-bold text-[#141414] dark:text-white">${taxRec ? formatIndoDate(taxRec.dueDate) : '-'}</span>
+                                <span class="font-mono font-bold text-[#141414]">${taxRec ? formatIndoDate(taxRec.dueDate) : '-'}</span>
                             </div>
                             <div class="flex justify-between text-neutral-500">
                                 <span>Estimasi PKB:</span>
-                                <span class="font-mono font-semibold text-[#141414] dark:text-white">${taxRec && taxRec.amount ? formatRupiah(taxRec.amount) : '-'}</span>
+                                <span class="font-mono font-semibold text-[#141414]">${taxRec && taxRec.amount ? formatRupiah(taxRec.amount) : '-'}</span>
                             </div>
                         </div>
 
-                        <div class="pt-3 border-t border-neutral-100 dark:border-neutral-800 flex items-center justify-between">
+                        <div class="pt-3 border-t border-neutral-100 flex items-center justify-between">
                             ${taxRec ? `
-                                <a href="${gcalUrl}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center space-x-1 text-xs font-medium text-neutral-700 dark:text-neutral-300 hover:underline">
+                                <a href="${gcalUrl}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center space-x-1 text-xs font-medium text-neutral-700 hover:underline">
                                     <i data-lucide="calendar-plus" class="w-3.5 h-3.5 text-[#D63333]"></i>
                                     <span>Google Calendar</span>
                                 </a>
                             ` : '<span></span>'}
-                            <button onclick="openTaxModal('${v.id}')" class="px-3 py-1.5 text-xs font-semibold rounded-full bg-[#141414] text-white dark:bg-white dark:text-[#141414]">
+                            <button onclick="openTaxModal('${v.id}')" class="px-3 py-1.5 text-xs font-semibold rounded-full bg-[#141414] text-white">
                                 ${taxRec ? 'Edit Pajak' : 'Set Pajak'}
                             </button>
                         </div>
@@ -1993,7 +1953,7 @@
             const grid = document.getElementById('simGrid');
             if (appData.simRecords.length === 0) {
                 grid.innerHTML = `
-                    <div class="col-span-full py-12 text-center border border-dashed border-neutral-300 dark:border-neutral-700 rounded-2xl">
+                    <div class="col-span-full py-12 text-center border border-dashed border-neutral-300 rounded-2xl">
                         <i data-lucide="id-card" class="w-8 h-8 mx-auto text-neutral-400 mb-2"></i>
                         <p class="text-xs text-neutral-500">Belum ada pengingat SIM.</p>
                         <button onclick="openSimModal()" class="mt-3 px-4 py-1.5 text-xs font-semibold rounded-full bg-[#D63333] text-white">Tambah SIM Pertama</button>
@@ -2007,35 +1967,35 @@
                 const diffDays = getDaysDifference(sim.expiryDate);
 
                 let badgeHtml = '';
-                if (diffDays < 0) badgeHtml = `<span class="px-2.5 py-0.5 rounded-full text-[10px] font-mono bg-red-100 text-red-800 dark:bg-red-950 dark:text-red-300">Kadaluarsa</span>`;
-                else if (diffDays <= WARN_DAYS) badgeHtml = `<span class="px-2.5 py-0.5 rounded-full text-[10px] font-mono bg-amber-100 text-amber-900 dark:bg-amber-950 dark:text-amber-200">${diffDays} Hr Lagi</span>`;
-                else badgeHtml = `<span class="px-2.5 py-0.5 rounded-full text-[10px] font-mono bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">${diffDays} Hr Aktif</span>`;
+                if (diffDays < 0) badgeHtml = `<span class="px-2.5 py-0.5 rounded-full text-[10px] font-mono bg-red-100 text-red-800">Kadaluarsa</span>`;
+                else if (diffDays <= WARN_DAYS) badgeHtml = `<span class="px-2.5 py-0.5 rounded-full text-[10px] font-mono bg-amber-100 text-amber-900">${diffDays} Hr Lagi</span>`;
+                else badgeHtml = `<span class="px-2.5 py-0.5 rounded-full text-[10px] font-mono bg-emerald-100 text-emerald-800">${diffDays} Hr Aktif</span>`;
 
                 const gcalUrl = generateGoogleCalendarUrl(`Perpanjang ${sim.type} (5 Thn)`, `Perpanjangan SIM 5 tahunan untuk ${sim.owner||'-'}`, sim.expiryDate);
 
                 return `
-                    <div class="p-5 rounded-2xl border border-neutral-200/80 dark:border-neutral-800 bg-white dark:bg-[#141414] shadow-sm flex flex-col justify-between space-y-4">
+                    <div class="p-5 rounded-2xl border border-neutral-200/80 bg-white shadow-sm flex flex-col justify-between space-y-4">
                         <div>
                             <div class="flex items-center justify-between">
-                                <span class="text-xs font-mono font-bold px-2.5 py-0.5 rounded-full bg-[#141414] text-white dark:bg-white dark:text-[#141414]">${esc(sim.type)}</span>
+                                <span class="text-xs font-mono font-bold px-2.5 py-0.5 rounded-full bg-[#141414] text-white">${esc(sim.type)}</span>
                                 ${badgeHtml}
                             </div>
-                            <h3 class="text-sm font-semibold text-[#141414] dark:text-white mt-3">${esc(sim.owner || 'Pemilik SIM')}</h3>
+                            <h3 class="text-sm font-semibold text-[#141414] mt-3">${esc(sim.owner || 'Pemilik SIM')}</h3>
                         </div>
 
-                        <div class="pt-3 border-t border-neutral-100 dark:border-neutral-800 text-xs space-y-1.5">
+                        <div class="pt-3 border-t border-neutral-100 text-xs space-y-1.5">
                             <div class="flex justify-between text-neutral-500">
                                 <span>Terbit/Perpanjang:</span>
-                                <span class="font-mono font-semibold text-[#141414] dark:text-white">${formatIndoDate(sim.issueDate)}</span>
+                                <span class="font-mono font-semibold text-[#141414]">${formatIndoDate(sim.issueDate)}</span>
                             </div>
                             <div class="flex justify-between text-neutral-500">
                                 <span>Kadaluarsa (+5 Thn):</span>
-                                <span class="font-mono font-bold text-[#141414] dark:text-white">${formatIndoDate(sim.expiryDate)}</span>
+                                <span class="font-mono font-bold text-[#141414]">${formatIndoDate(sim.expiryDate)}</span>
                             </div>
                         </div>
 
-                        <div class="pt-3 border-t border-neutral-100 dark:border-neutral-800 flex items-center justify-between">
-                            <a href="${gcalUrl}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center space-x-1 text-xs font-medium text-neutral-700 dark:text-neutral-300 hover:underline">
+                        <div class="pt-3 border-t border-neutral-100 flex items-center justify-between">
+                            <a href="${gcalUrl}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center space-x-1 text-xs font-medium text-neutral-700 hover:underline">
                                 <i data-lucide="calendar-plus" class="w-3.5 h-3.5 text-[#D63333]"></i>
                                 <span>Google Calendar</span>
                             </a>
@@ -2138,21 +2098,6 @@
             const today = new Date(); today.setHours(0,0,0,0);
             const target = parseISODate(targetDateStr);
             return Math.round((target - today) / (1000 * 60 * 60 * 24));
-        }
-
-        function isDark() { return document.documentElement.classList.contains('dark'); }
-
-        function applyTheme(dark, persist) {
-            document.documentElement.classList.toggle('dark', dark);
-            const meta = document.getElementById('metaTheme');
-            if (meta) meta.setAttribute('content', dark ? '#0b0b0b' : '#F6F7F9');
-            if (persist) { try { localStorage.setItem(THEME_KEY, dark ? 'dark' : 'light'); } catch (e) {} }
-            updateNavGlider();
-        }
-
-        function toggleTheme() {
-            applyTheme(!isDark(), true);
-            renderDashboardCharts();
         }
 
         function exportData() {
@@ -2347,17 +2292,6 @@
         function initPWA() {
             const label = document.getElementById('appVersionLabel');
             if (label) label.textContent = 'Garasiku v' + APP_VERSION;
-
-            // Ikuti tema sistem selama pengguna belum memilih manual
-            const mq = window.matchMedia('(prefers-color-scheme: dark)');
-            const onSystemTheme = (e) => {
-                let chosen = null;
-                try { chosen = localStorage.getItem(THEME_KEY); } catch (_) {}
-                if (chosen) return;
-                applyTheme(e.matches, false);
-                renderDashboardCharts();
-            };
-            if (mq.addEventListener) mq.addEventListener('change', onSystemTheme);
 
             updateInstallUI();
 

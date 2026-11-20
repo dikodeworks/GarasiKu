@@ -39,6 +39,10 @@ npm run build    # rebuild Tailwind (css/app.css) + stempel versi baru di sw.js
 Deploy ulang. Pengguna akan melihat toast **"Versi baru tersedia → Muat Ulang"**.
 Jika lupa `npm run build`, perubahan tidak akan terdeteksi oleh service worker.
 
+> **Cloudflare Workers/Pages:** `/index.html` di-redirect ke `/`. Karena itu `index.html` sengaja *tidak* di-precache langsung;
+> halaman utama di-cache lewat `./` dan respons hasil redirect dibersihkan di `sw.template.js`. Jangan ditambahkan kembali.
+> Jika browser masih menyimpan service worker lama yang rusak: DevTools → Application → Service Workers → Unregister, lalu Clear site data.
+
 Skrip lain: `npm run vendor` (salin Chart.js/Lucide/font dari node_modules), `npm run icons` (buat ulang ikon).
 
 ## 5. Catatan data
