@@ -46,6 +46,11 @@
             font-family: 'Google Sans', 'Open Sans', 'Plus Jakarta Sans', sans-serif;
         }
 
+        /* Semua judul memakai Google Sans */
+        h1, h2, h3, h4 {
+            font-family: 'Google Sans', 'Open Sans', 'Plus Jakarta Sans', -apple-system, sans-serif;
+        }
+
         ::-webkit-scrollbar { width: 5px; height: 5px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #d4d4d4; border-radius: 9999px; }
@@ -79,8 +84,8 @@
             
             <!-- LEFT: LOGO BLOCK -->
             <div class="flex flex-col select-none cursor-pointer shrink-0" onclick="switchTab('dashboard')">
-                <h1 class="text-xl sm:text-2xl font-extrabold tracking-tight text-[#141414] leading-none">
-                    GarasiKu<span class="text-[#D63333] animate-pulse inline-block font-extrabold">.</span>
+                <h1 class="text-xl sm:text-2xl font-semibold tracking-tight text-[#141414] leading-none">
+                    GarasiKu<span class="text-[#D63333] animate-pulse inline-block font-semibold">.</span>
                 </h1>
                 <div class="logo-subtitle mt-1">
                     <span>b</span><span>y</span><span>&nbsp;</span><span>D</span><span>i</span><span>k</span><span>o</span><span>d</span><span>e</span><span>W</span><span>o</span><span>r</span><span>k</span><span>s</span><span class="text-[#D63333] font-bold">.</span>
@@ -232,7 +237,7 @@
                 <!-- LEFT CARD: STATUS DOKUMEN (DONUT CHART) -->
                 <div class="lg:col-span-4 p-6 rounded-2xl border border-neutral-200/80 dark:border-neutral-800 bg-white dark:bg-[#141414] shadow-sm flex flex-col justify-between space-y-4">
                     <div>
-                        <h3 class="text-base font-extrabold text-[#141414] dark:text-white">
+                        <h3 class="text-base font-semibold text-[#141414] dark:text-white">
                             Status Dokumen<span class="text-[#D63333]">.</span>
                         </h3>
                         <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">Ringkasan status Pajak & SIM terdaftar</p>
@@ -282,7 +287,7 @@
                 <div class="lg:col-span-8 p-6 rounded-2xl border border-neutral-200/80 dark:border-neutral-800 bg-white dark:bg-[#141414] shadow-sm flex flex-col justify-between space-y-4">
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                         <div>
-                            <h3 class="text-base font-extrabold text-[#141414] dark:text-white flex items-center space-x-2">
+                            <h3 class="text-base font-semibold text-[#141414] dark:text-white flex items-center space-x-2">
                                 <span>Tren Biaya Servis</span>
                                 <span class="text-[#D63333]">.</span>
                             </h3>
@@ -298,9 +303,7 @@
                         <div class="flex flex-wrap items-center gap-1 bg-[#F0F2F5] dark:bg-neutral-900 p-1 rounded-full border border-neutral-200/70 dark:border-neutral-800 text-[11px] font-semibold">
                             <button onclick="setChartRange('3M')" id="range-3M" class="range-btn px-2.5 py-1 rounded-full transition border border-transparent">3 Bulan</button>
                             <button onclick="setChartRange('6M')" id="range-6M" class="range-btn px-2.5 py-1 rounded-full transition border border-transparent">6 Bulan</button>
-                            <button onclick="setChartRange('1Y')" id="range-1Y" class="range-btn active px-2.5 py-1 rounded-full transition border border-transparent">1 Tahun</button>
-                            <button onclick="setChartRange('2Y')" id="range-2Y" class="range-btn px-2.5 py-1 rounded-full transition border border-transparent">2 Tahun</button>
-                            <button onclick="setChartRange('3Y')" id="range-3Y" class="range-btn px-2.5 py-1 rounded-full transition border border-transparent">3 Tahun</button>
+                            <button onclick="setChartRange('12M')" id="range-12M" class="range-btn active px-2.5 py-1 rounded-full transition border border-transparent">12 Bulan</button>
                         </div>
                     </div>
 
@@ -316,7 +319,7 @@
                 
                 <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-2 border-b border-neutral-100 dark:border-neutral-800">
                     <div>
-                        <h3 class="text-base font-extrabold text-[#141414] dark:text-white">
+                        <h3 class="text-base font-semibold text-[#141414] dark:text-white">
                             Jadwal & Riwayat Terkini<span class="text-[#D63333]">.</span>
                         </h3>
                         <p class="text-xs text-neutral-500 dark:text-neutral-400">Ringkasan pengingat pajak, perpanjangan SIM, jadwal servis berikutnya, dan riwayat servis</p>
@@ -342,12 +345,12 @@
                     <table class="w-full text-left text-xs">
                         <thead class="bg-[#F6F7F9]/80 dark:bg-neutral-900/60 font-semibold text-neutral-500 dark:text-neutral-400 border-y border-neutral-200/60 dark:border-neutral-800">
                             <tr>
-                                <th class="py-3 px-4">KATEGORI</th>
+                                <th class="py-3 px-4 whitespace-nowrap">KATEGORI</th>
                                 <th class="py-3 px-4">ITEM / KENDARAAN</th>
                                 <th class="py-3 px-4">INFORMASI DETIL</th>
-                                <th class="py-3 px-4">STATUS</th>
-                                <th class="py-3 px-4">JATUH TEMPO</th>
-                                <th class="py-3 px-4 text-center">AKSI / REMINDER</th>
+                                <th class="py-3 px-4 whitespace-nowrap">STATUS</th>
+                                <th class="py-3 px-4 whitespace-nowrap">JATUH TEMPO</th>
+                                <th class="py-3 px-4 text-center whitespace-nowrap">AKSI / REMINDER</th>
                             </tr>
                         </thead>
                         <tbody id="dashTableBody" class="divide-y divide-neutral-100 dark:divide-neutral-800/80">
@@ -362,7 +365,7 @@
         <section id="sec-vehicles" class="hidden space-y-6">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div>
-                    <h2 class="text-lg font-extrabold tracking-tight text-[#141414] dark:text-white">Daftar Kendaraan Saya<span class="text-[#D63333]">.</span></h2>
+                    <h2 class="text-lg font-semibold tracking-tight text-[#141414] dark:text-white">Daftar Kendaraan Saya<span class="text-[#D63333]">.</span></h2>
                     <p class="text-xs text-neutral-500">Kelola daftar kendaraan Roda 2 & Roda 4 milik Anda.</p>
                 </div>
                 <div class="flex items-center space-x-2">
@@ -381,8 +384,8 @@
         <section id="sec-service" class="hidden space-y-6">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div>
-                    <h2 class="text-lg font-extrabold tracking-tight text-[#141414] dark:text-white">Riwayat & Catatan Servis<span class="text-[#D63333]">.</span></h2>
-                    <p class="text-xs text-neutral-500">Catat kilometer, pergantian suku cadang, dan lokasi bengkel.</p>
+                    <h2 class="text-lg font-semibold tracking-tight text-[#141414] dark:text-white">Riwayat & Catatan Servis<span class="text-[#D63333]">.</span></h2>
+                    <p class="text-xs text-neutral-500">Catat kilometer, pergantian suku cadang, dan lokasi bengkel. Interval: Roda 2 tiap 2.000 KM / 2 bulan, Roda 4 tiap 5.000 KM / 3 bulan.</p>
                 </div>
                 <button onclick="openServiceModal()" class="inline-flex items-center space-x-1.5 px-4 py-2 text-xs font-semibold rounded-full bg-[#D63333] text-white hover:bg-red-700 transition shadow-sm">
                     <i data-lucide="plus" class="w-4 h-4"></i>
@@ -428,7 +431,7 @@
         <section id="sec-pajak" class="hidden space-y-6">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div>
-                    <h2 class="text-lg font-extrabold tracking-tight text-[#141414] dark:text-white">Pengingat Pajak Kendaraan<span class="text-[#D63333]">.</span></h2>
+                    <h2 class="text-lg font-semibold tracking-tight text-[#141414] dark:text-white">Pengingat Pajak Kendaraan<span class="text-[#D63333]">.</span></h2>
                     <p class="text-xs text-neutral-500">Pantau tenggat waktu bayar Pajak Kendaraan Bermotor (PKB).</p>
                 </div>
                 <button onclick="openTaxModal()" class="inline-flex items-center space-x-1.5 px-4 py-2 text-xs font-semibold rounded-full bg-[#D63333] text-white hover:bg-red-700 transition shadow-sm">
@@ -445,7 +448,7 @@
         <section id="sec-sim" class="hidden space-y-6">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div>
-                    <h2 class="text-lg font-extrabold tracking-tight text-[#141414] dark:text-white">Pengingat Perpanjangan SIM<span class="text-[#D63333]">.</span></h2>
+                    <h2 class="text-lg font-semibold tracking-tight text-[#141414] dark:text-white">Pengingat Perpanjangan SIM<span class="text-[#D63333]">.</span></h2>
                     <p class="text-xs text-neutral-500">Golongan SIM A, B1, B2, C, CI, CII, D, dan DI.</p>
                 </div>
                 <button onclick="openSimModal()" class="inline-flex items-center space-x-1.5 px-4 py-2 text-xs font-semibold rounded-full bg-[#D63333] text-white hover:bg-red-700 transition shadow-sm">
@@ -476,7 +479,7 @@
     <div id="settingsModal" class="hidden fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
         <div class="bg-white dark:bg-[#141414] border border-neutral-200 dark:border-neutral-800 rounded-2xl max-w-lg w-full p-6 space-y-5 shadow-2xl">
             <div class="flex justify-between items-center border-b border-neutral-100 dark:border-neutral-800 pb-3">
-                <h3 class="text-base font-extrabold text-[#141414] dark:text-white">Pengaturan & Backup Data<span class="text-[#D63333]">.</span></h3>
+                <h3 class="text-base font-semibold text-[#141414] dark:text-white">Pengaturan & Backup Data<span class="text-[#D63333]">.</span></h3>
                 <button onclick="closeSettingsModal()" class="text-neutral-400 hover:text-[#141414] dark:hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
             </div>
 
@@ -491,7 +494,7 @@
             </div>
 
             <div class="space-y-3 pt-1">
-                <h4 class="text-xs font-bold uppercase tracking-wider text-neutral-400">Manajemen Data JSON</h4>
+                <h4 class="text-xs font-semibold uppercase tracking-wider text-neutral-400">Manajemen Data JSON</h4>
                 <div class="grid grid-cols-2 gap-3">
                     <button onclick="exportData()" class="flex items-center justify-center space-x-2 p-3 rounded-xl border border-neutral-200 dark:border-neutral-800 hover:bg-neutral-50 dark:hover:bg-neutral-800 text-xs font-semibold">
                         <i data-lucide="download" class="w-4 h-4 text-[#D63333]"></i>
@@ -518,7 +521,7 @@
     <div id="vehicleModal" class="hidden fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
         <div class="bg-white dark:bg-[#141414] border border-neutral-200 dark:border-neutral-800 rounded-2xl max-w-md w-full p-6 space-y-4 shadow-xl">
             <div class="flex justify-between items-center border-b border-neutral-100 dark:border-neutral-800 pb-3">
-                <h3 id="vehicleModalTitle" class="text-base font-extrabold text-[#141414] dark:text-white">Tambah Kendaraan</h3>
+                <h3 id="vehicleModalTitle" class="text-base font-semibold text-[#141414] dark:text-white">Tambah Kendaraan</h3>
                 <button onclick="closeVehicleModal()" class="text-neutral-400 hover:text-[#141414] dark:hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
             </div>
             <form id="vehicleForm" onsubmit="saveVehicle(event)" class="space-y-3 text-xs">
@@ -556,14 +559,14 @@
     <div id="serviceModal" class="hidden fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
         <div class="bg-white dark:bg-[#141414] border border-neutral-200 dark:border-neutral-800 rounded-2xl max-w-lg w-full p-6 space-y-4 shadow-xl max-h-[90vh] overflow-y-auto">
             <div class="flex justify-between items-center border-b border-neutral-100 dark:border-neutral-800 pb-3">
-                <h3 id="serviceModalTitle" class="text-base font-extrabold text-[#141414] dark:text-white">Catat Servis Kendaraan</h3>
+                <h3 id="serviceModalTitle" class="text-base font-semibold text-[#141414] dark:text-white">Catat Servis Kendaraan</h3>
                 <button onclick="closeServiceModal()" class="text-neutral-400 hover:text-[#141414] dark:hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
             </div>
             <form id="serviceForm" onsubmit="saveServiceLog(event)" class="space-y-3 text-xs">
                 <input type="hidden" id="srvId">
                 <div>
                     <label class="block font-medium mb-1">Pilih Kendaraan</label>
-                    <select id="srvVehicleId" required class="w-full p-2.5 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-[#F6F7F9] dark:bg-neutral-900 text-[#141414] dark:text-white outline-none">
+                    <select id="srvVehicleId" required onchange="autoCalcNextServiceDate()" class="w-full p-2.5 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-[#F6F7F9] dark:bg-neutral-900 text-[#141414] dark:text-white outline-none">
                     </select>
                 </div>
                 <div class="grid grid-cols-2 gap-3">
@@ -573,7 +576,7 @@
                     </div>
                     <div>
                         <label class="block font-medium mb-1">Odometer (KM)</label>
-                        <input type="number" id="srvOdometer" placeholder="15400" required class="w-full p-2.5 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-[#F6F7F9] dark:bg-neutral-900 text-[#141414] dark:text-white font-mono outline-none">
+                        <input type="number" id="srvOdometer" placeholder="15400" required oninput="autoCalcNextServiceDate()" class="w-full p-2.5 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-[#F6F7F9] dark:bg-neutral-900 text-[#141414] dark:text-white font-mono outline-none">
                     </div>
                 </div>
                 <div>
@@ -609,10 +612,17 @@
                         <p class="text-[10px] text-neutral-400 mt-1">Otomatis dari total sub biaya.</p>
                     </div>
                 </div>
-                <div>
-                    <label class="block font-medium mb-1">Estimasi Servis Berikutnya</label>
-                    <input type="date" id="srvNextDate" required class="w-full p-2.5 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-[#F6F7F9] dark:bg-neutral-900 text-[#141414] dark:text-white outline-none">
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block font-medium mb-1">Estimasi Servis Berikutnya</label>
+                        <input type="date" id="srvNextDate" required class="w-full p-2.5 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-[#F6F7F9] dark:bg-neutral-900 text-[#141414] dark:text-white outline-none">
+                    </div>
+                    <div>
+                        <label class="block font-medium mb-1">Servis Berikutnya (KM)</label>
+                        <input type="number" id="srvNextOdometer" readonly class="w-full p-2.5 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-neutral-100 dark:bg-neutral-800 text-[#141414] dark:text-white font-mono outline-none cursor-not-allowed" placeholder="0">
+                    </div>
                 </div>
+                <p id="srvIntervalHint" class="text-[10px] text-neutral-400">Interval servis: Roda 2 tiap 2.000 KM / 2 bulan, Roda 4 tiap 5.000 KM / 3 bulan.</p>
 
                 <div class="pt-3 flex justify-end space-x-2">
                     <button type="button" onclick="closeServiceModal()" class="px-4 py-2 rounded-full border border-neutral-200 dark:border-neutral-800">Batal</button>
@@ -626,7 +636,7 @@
     <div id="taxModal" class="hidden fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
         <div class="bg-white dark:bg-[#141414] border border-neutral-200 dark:border-neutral-800 rounded-2xl max-w-md w-full p-6 space-y-4 shadow-xl">
             <div class="flex justify-between items-center border-b border-neutral-100 dark:border-neutral-800 pb-3">
-                <h3 id="taxModalTitle" class="text-base font-extrabold text-[#141414] dark:text-white">Atur Pajak Kendaraan</h3>
+                <h3 id="taxModalTitle" class="text-base font-semibold text-[#141414] dark:text-white">Atur Pajak Kendaraan</h3>
                 <button onclick="closeTaxModal()" class="text-neutral-400 hover:text-[#141414] dark:hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
             </div>
             <form id="taxForm" onsubmit="saveTaxRecord(event)" class="space-y-3 text-xs">
@@ -661,7 +671,7 @@
     <div id="simModal" class="hidden fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
         <div class="bg-white dark:bg-[#141414] border border-neutral-200 dark:border-neutral-800 rounded-2xl max-w-md w-full p-6 space-y-4 shadow-xl">
             <div class="flex justify-between items-center border-b border-neutral-100 dark:border-neutral-800 pb-3">
-                <h3 id="simModalTitle" class="text-base font-extrabold text-[#141414] dark:text-white">Atur Masa SIM</h3>
+                <h3 id="simModalTitle" class="text-base font-semibold text-[#141414] dark:text-white">Atur Masa SIM</h3>
                 <button onclick="closeSimModal()" class="text-neutral-400 hover:text-[#141414] dark:hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
             </div>
             <form id="simForm" onsubmit="saveSimRecord(event)" class="space-y-3 text-xs">
@@ -704,6 +714,17 @@
     <script>
         const STORAGE_KEY = 'garasiku_pwa_data';
 
+        // Parameter interval servis: Roda 2 tiap 2.000 KM / 2 bulan, Roda 4 tiap 5.000 KM / 3 bulan.
+        const SERVICE_INTERVALS = {
+            'Roda 2': { km: 2000, months: 2 },
+            'Roda 4': { km: 5000, months: 3 }
+        };
+
+        function getServiceInterval(vehicleId) {
+            const veh = appData.vehicles.find(v => v.id === vehicleId);
+            return SERVICE_INTERVALS[veh?.type] || SERVICE_INTERVALS['Roda 4'];
+        }
+
         let appData = {
             vehicles: [],
             serviceLogs: [],
@@ -713,7 +734,7 @@
 
         let barChartInstance = null;
         let donutChartInstance = null;
-        let activeChartRange = '1Y';
+        let activeChartRange = '12M';
         let currentActiveTab = 'dashboard';
 
         const SAMPLE_DATA = {
@@ -731,7 +752,7 @@
                     ],
                     parts: 'Oli Mesin MPX2',
                     partItems: [{ name: 'Oli Mesin MPX2', cost: 50000 }],
-                    location: 'AHASS Kebayoran', cost: 145000, nextDate: '2026-04-10'
+                    location: 'AHASS Kebayoran', cost: 145000, nextDate: '2026-04-10', nextOdometer: 14500
                 },
                 {
                     id: 's_2', vehicleId: 'v_2', date: '2026-02-05', odometer: 24300,
@@ -746,7 +767,7 @@
                         { name: 'Filter Oli', cost: 60000 },
                         { name: 'Filter Udara', cost: 40000 }
                     ],
-                    location: 'Auto2000 Radio Dalam', cost: 1250000, nextDate: '2026-08-05'
+                    location: 'Auto2000 Radio Dalam', cost: 1250000, nextDate: '2026-08-05', nextOdometer: 29300
                 },
                 {
                     id: 's_3', vehicleId: 'v_1', date: '2025-10-12', odometer: 9800,
@@ -754,7 +775,7 @@
                     taskItems: [{ name: 'Ganti Ban Belakang', cost: 50000 }],
                     parts: 'Ban FDR Sport Zevo 90/90-14',
                     partItems: [{ name: 'Ban FDR Sport Zevo 90/90-14', cost: 260000 }],
-                    location: 'Planet Ban', cost: 310000, nextDate: '2026-01-10'
+                    location: 'Planet Ban', cost: 310000, nextDate: '2026-01-10', nextOdometer: 11800
                 },
                 {
                     id: 's_4', vehicleId: 'v_2', date: '2025-08-20', odometer: 18000,
@@ -762,7 +783,7 @@
                     taskItems: [{ name: 'Ganti Kampas Rem Depan', cost: 80000 }],
                     parts: 'Brake Pad Original Toyota',
                     partItems: [{ name: 'Brake Pad Original Toyota', cost: 600000 }],
-                    location: 'Auto2000', cost: 680000, nextDate: '2026-02-05'
+                    location: 'Auto2000', cost: 680000, nextDate: '2026-02-05', nextOdometer: 23000
                 }
             ],
             taxRecords: [
@@ -952,7 +973,7 @@
 
         function setChartRange(range) {
             activeChartRange = range;
-            ['3M', '6M', '1Y', '2Y', '3Y'].forEach(r => {
+            ['3M', '6M', '12M'].forEach(r => {
                 const btn = document.getElementById(`range-${r}`);
                 if (btn) {
                     if (r === range) btn.classList.add('active');
@@ -1061,9 +1082,7 @@
             let monthsCount = 12;
             if (activeChartRange === '3M') monthsCount = 3;
             else if (activeChartRange === '6M') monthsCount = 6;
-            else if (activeChartRange === '1Y') monthsCount = 12;
-            else if (activeChartRange === '2Y') monthsCount = 24;
-            else if (activeChartRange === '3Y') monthsCount = 36;
+            else if (activeChartRange === '12M') monthsCount = 12;
 
             const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
             const labels = [];
@@ -1265,13 +1284,13 @@
             tbody.innerHTML = items.map(item => {
                 let statusBadge = '';
                 if (item.status === 'TERLEWAT') {
-                    statusBadge = `<span class="inline-flex items-center space-x-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-red-100 text-red-800 dark:bg-red-950 dark:text-red-300"><span class="w-1.5 h-1.5 rounded-full bg-red-600"></span><span>Terlewat (${Math.abs(item.diff)} hr)</span></span>`;
+                    statusBadge = `<span class="inline-flex items-center space-x-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold whitespace-nowrap bg-red-100 text-red-800 dark:bg-red-950 dark:text-red-300"><span class="w-1.5 h-1.5 rounded-full bg-red-600"></span><span>Terlewat (${Math.abs(item.diff)} hr)</span></span>`;
                 } else if (item.status === 'SEGERA') {
-                    statusBadge = `<span class="inline-flex items-center space-x-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-900 dark:bg-amber-950 dark:text-amber-200"><span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span><span>Segera (${item.diff} hr)</span></span>`;
+                    statusBadge = `<span class="inline-flex items-center space-x-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold whitespace-nowrap bg-amber-100 text-amber-900 dark:bg-amber-950 dark:text-amber-200"><span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span><span>Segera (${item.diff} hr)</span></span>`;
                 } else if (item.status === 'RIWAYAT') {
-                    statusBadge = `<span class="inline-flex items-center space-x-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-neutral-100 text-neutral-600 dark:bg-neutral-800 dark:text-neutral-300"><span class="w-1.5 h-1.5 rounded-full bg-neutral-400"></span><span>Riwayat</span></span>`;
+                    statusBadge = `<span class="inline-flex items-center space-x-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold whitespace-nowrap bg-neutral-100 text-neutral-600 dark:bg-neutral-800 dark:text-neutral-300"><span class="w-1.5 h-1.5 rounded-full bg-neutral-400"></span><span>Riwayat</span></span>`;
                 } else {
-                    statusBadge = `<span class="inline-flex items-center space-x-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span><span>Aman (${item.diff} hr)</span></span>`;
+                    statusBadge = `<span class="inline-flex items-center space-x-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold whitespace-nowrap bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span><span>Aman (${item.diff} hr)</span></span>`;
                 }
 
                 const dateCell = item.status === 'RIWAYAT'
@@ -1280,11 +1299,13 @@
 
                 return `
                     <tr class="hover:bg-neutral-50 dark:hover:bg-neutral-900/40 transition">
-                        <td class="py-3 px-4 font-mono text-[11px] font-bold text-neutral-500">${item.kategori}</td>
-                        <td class="py-3 px-4 font-bold text-[#141414] dark:text-white">${item.title}</td>
-                        <td class="py-3 px-4 text-neutral-500">${item.detail}</td>
-                        <td class="py-3 px-4">${statusBadge}</td>
-                        <td class="py-3 px-4">${dateCell}</td>
+                        <td class="py-3 px-4 align-top font-mono text-[11px] font-bold text-neutral-500 whitespace-nowrap">${item.kategori}</td>
+                        <td class="py-3 px-4 align-top font-semibold text-[#141414] dark:text-white">${item.title}</td>
+                        <td class="py-3 px-4 align-top">
+                            <div class="text-neutral-500 min-w-[200px] max-w-[420px] whitespace-normal break-words leading-relaxed">${item.detail}</div>
+                        </td>
+                        <td class="py-3 px-4 align-top whitespace-nowrap">${statusBadge}</td>
+                        <td class="py-3 px-4 align-top whitespace-nowrap">${dateCell}</td>
                         <td class="py-3 px-4 text-center">
                             ${item.status === 'RIWAYAT' ? '<span class="text-neutral-300 dark:text-neutral-600">—</span>' : `
                             <a href="${item.gcalUrl}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center space-x-1 px-3 py-1 rounded-full border border-neutral-200 dark:border-neutral-700 text-[11px] font-medium hover:bg-neutral-100 dark:hover:bg-neutral-800 transition">
@@ -1327,7 +1348,7 @@
                                     ${v.type}
                                 </span>
                             </div>
-                            <h3 class="text-base font-bold text-[#141414] dark:text-white mt-3">${v.model}</h3>
+                            <h3 class="text-base font-semibold text-[#141414] dark:text-white mt-3">${v.model}</h3>
                             <p class="text-xs font-mono text-neutral-500">${v.plate || 'No Plat -'}</p>
                         </div>
 
@@ -1467,7 +1488,7 @@
                     <tr class="hover:bg-neutral-50 dark:hover:bg-neutral-900/40 transition">
                         <td class="p-3.5 font-mono text-[#141414] dark:text-white">${formatIndoDate(s.date)}</td>
                         <td class="p-3.5">
-                            <div class="font-bold text-[#141414] dark:text-white">${veh ? veh.model : 'Dihapus'}</div>
+                            <div class="font-semibold text-[#141414] dark:text-white">${veh ? veh.model : 'Dihapus'}</div>
                             <div class="text-[10px] text-neutral-400 font-mono">${veh ? veh.type + ' • ' + (veh.plate||'-') : ''}</div>
                         </td>
                         <td class="p-3.5 font-mono">${Number(s.odometer).toLocaleString('id-ID')} KM</td>
@@ -1476,7 +1497,10 @@
                         </td>
                         <td class="p-3.5 text-neutral-500">${s.location || '-'}</td>
                         <td class="p-3.5 text-right font-mono font-semibold text-[#141414] dark:text-white">${formatRupiah(s.cost)}</td>
-                        <td class="p-3.5 font-mono text-neutral-600 dark:text-neutral-300">${formatIndoDate(s.nextDate)}</td>
+                        <td class="p-3.5 font-mono text-neutral-600 dark:text-neutral-300">
+                            <div>${formatIndoDate(s.nextDate)}</div>
+                            ${s.nextOdometer ? `<div class="text-[10px] text-neutral-400">${Number(s.nextOdometer).toLocaleString('id-ID')} KM</div>` : ''}
+                        </td>
                         <td class="p-3.5 text-center space-x-1">
                             <a href="${gcalUrl}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center space-x-1 px-2.5 py-1 rounded-full border border-neutral-200 dark:border-neutral-700 text-[10px] hover:bg-neutral-100">
                                 <i data-lucide="calendar-plus" class="w-3 h-3 text-[#D63333]"></i>
@@ -1563,8 +1587,6 @@
             partContainer.innerHTML = '';
 
             const todayStr = new Date().toISOString().split('T')[0];
-            document.getElementById('srvDate').value = todayStr;
-            autoCalcNextServiceDate();
 
             if (id) {
                 const log = appData.serviceLogs.find(item => item.id === id);
@@ -1576,27 +1598,57 @@
                     document.getElementById('srvLocation').value = log.location || '';
                     document.getElementById('srvNextDate').value = log.nextDate;
 
+                    const interval = getServiceInterval(log.vehicleId);
+                    const nextOdo = log.nextOdometer ? Number(log.nextOdometer) : ((Number(log.odometer) || 0) + interval.km);
+                    document.getElementById('srvNextOdometer').value = nextOdo || '';
+
                     getServiceItems(log, 'task').forEach(item => addServiceItemRow('task', item.name, item.cost));
                     getServiceItems(log, 'part').forEach(item => addServiceItemRow('part', item.name, item.cost));
                 }
+            } else {
+                document.getElementById('srvDate').value = todayStr;
+                autoCalcNextServiceDate();
             }
 
             if (!taskContainer.querySelector('.service-item-row')) addServiceItemRow('task');
             if (!partContainer.querySelector('.service-item-row')) addServiceItemRow('part');
 
+            updateServiceIntervalHint();
             updateServiceTotal();
             document.getElementById('serviceModal').classList.remove('hidden');
         }
 
         function closeServiceModal() { document.getElementById('serviceModal').classList.add('hidden'); }
 
+        function updateServiceIntervalHint() {
+            const vehicleId = document.getElementById('srvVehicleId')?.value;
+            const hint = document.getElementById('srvIntervalHint');
+            if (!hint) return;
+            const veh = appData.vehicles.find(v => v.id === vehicleId);
+            if (veh) {
+                const interval = SERVICE_INTERVALS[veh.type] || SERVICE_INTERVALS['Roda 4'];
+                hint.innerText = `Interval ${veh.type}: servis tiap ${interval.km.toLocaleString('id-ID')} KM atau ${interval.months} bulan.`;
+            } else {
+                hint.innerText = 'Interval servis: Roda 2 tiap 2.000 KM / 2 bulan, Roda 4 tiap 5.000 KM / 3 bulan.';
+            }
+        }
+
         function autoCalcNextServiceDate() {
             const dateVal = document.getElementById('srvDate').value;
+            const odoVal = Number(document.getElementById('srvOdometer').value);
+            const vehicleId = document.getElementById('srvVehicleId').value;
+            const interval = getServiceInterval(vehicleId);
+
+            updateServiceIntervalHint();
+
             if (dateVal) {
                 const d = new Date(dateVal);
-                d.setMonth(d.getMonth() + 3);
+                d.setMonth(d.getMonth() + interval.months);
                 document.getElementById('srvNextDate').value = d.toISOString().split('T')[0];
             }
+
+            const nextOdometer = document.getElementById('srvNextOdometer');
+            if (nextOdometer) nextOdometer.value = odoVal > 0 ? odoVal + interval.km : '';
         }
 
         function saveServiceLog(e) {
@@ -1607,6 +1659,7 @@
             const odometer = Number(document.getElementById('srvOdometer').value);
             const location = document.getElementById('srvLocation').value.trim();
             const nextDate = document.getElementById('srvNextDate').value;
+            const nextOdometer = Number(document.getElementById('srvNextOdometer').value) || null;
 
             const taskItems = collectServiceItems('srvTaskItems');
             const partItems = collectServiceItems('srvPartItems');
@@ -1630,9 +1683,9 @@
 
             if (id) {
                 const idx = appData.serviceLogs.findIndex(s => s.id === id);
-                if (idx !== -1) appData.serviceLogs[idx] = { id, vehicleId, date, odometer, task, taskItems, parts, partItems, location, cost, nextDate };
+                if (idx !== -1) appData.serviceLogs[idx] = { id, vehicleId, date, odometer, task, taskItems, parts, partItems, location, cost, nextDate, nextOdometer };
             } else {
-                appData.serviceLogs.push({ id: 's_' + Date.now(), vehicleId, date, odometer, task, taskItems, parts, partItems, location, cost, nextDate });
+                appData.serviceLogs.push({ id: 's_' + Date.now(), vehicleId, date, odometer, task, taskItems, parts, partItems, location, cost, nextDate, nextOdometer });
             }
             saveToStorage();
             closeServiceModal();
@@ -1678,7 +1731,7 @@
                                 <span class="text-xs font-mono text-neutral-500">${v.label}</span>
                                 ${badgeHtml}
                             </div>
-                            <h3 class="text-base font-bold text-[#141414] dark:text-white mt-2">${v.model}</h3>
+                            <h3 class="text-base font-semibold text-[#141414] dark:text-white mt-2">${v.model}</h3>
                             <p class="text-xs font-mono text-neutral-500">${v.plate || 'No Plat -'} • ${v.type}</p>
                         </div>
 
@@ -1797,7 +1850,7 @@
                                 <span class="text-xs font-mono font-bold px-2.5 py-0.5 rounded-full bg-[#141414] text-white dark:bg-white dark:text-[#141414]">${sim.type}</span>
                                 ${badgeHtml}
                             </div>
-                            <h3 class="text-sm font-bold text-[#141414] dark:text-white mt-3">${sim.owner || 'Pemilik SIM'}</h3>
+                            <h3 class="text-sm font-semibold text-[#141414] dark:text-white mt-3">${sim.owner || 'Pemilik SIM'}</h3>
                         </div>
 
                         <div class="pt-3 border-t border-neutral-100 dark:border-neutral-800 text-xs space-y-1.5">
