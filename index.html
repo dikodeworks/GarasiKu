@@ -1,0 +1,1741 @@
+<!DOCTYPE html>
+<html lang="id" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Garasiku — by DikodeWorks</title>
+    
+    <!-- Google Fonts: Google Sans / Open Sans & Plus Jakarta Sans + JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400..800;1,400..800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Google Sans', 'Open Sans', 'Plus Jakarta Sans', '-apple-system', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace']
+                    },
+                    colors: {
+                        dkred: '#D63333'
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Chart.js & Lucide Icons -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        @font-face {
+            font-family: 'Google Sans';
+            font-style: normal;
+            font-weight: 400 700;
+            font-display: swap;
+            src: local('Google Sans'), local('GoogleSans-Regular'), url(https://fonts.gstatic.com/s/open-sans/v40/memSYaGs126MiZpBA-UvWbX2vVnXBbObj2OVZyOOSr4dVJWUgsjZ0B4gaVQUwaEQbjA.woff2) format('woff2');
+        }
+
+        body {
+            font-family: 'Google Sans', 'Open Sans', 'Plus Jakarta Sans', sans-serif;
+        }
+
+        ::-webkit-scrollbar { width: 5px; height: 5px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #d4d4d4; border-radius: 9999px; }
+        .dark ::-webkit-scrollbar-thumb { background: #333333; }
+        
+        /* Exact Width Logo Alignment for by DikodeWorks. */
+        .logo-subtitle {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            line-height: 1;
+            text-transform: none;
+            color: #666666;
+        }
+
+        .range-btn.active {
+            background-color: #D63333;
+            color: #ffffff;
+            border-color: #D63333;
+        }
+    </style>
+</head>
+<body class="bg-[#F6F7F9] text-[#141414] font-sans min-h-full flex flex-col transition-colors duration-200">
+
+    <!-- MAILGATE HEADER BAR -->
+    <header class="border-b border-neutral-200/80 bg-white/95 backdrop-blur sticky top-0 z-30 px-4 sm:px-8 py-3.5">
+        <div class="max-w-7xl mx-auto flex items-center justify-between gap-4">
+            
+            <!-- LEFT: LOGO BLOCK -->
+            <div class="flex flex-col select-none cursor-pointer shrink-0" onclick="switchTab('dashboard')">
+                <h1 class="text-xl sm:text-2xl font-extrabold tracking-tight text-[#141414] leading-none">
+                    GarasiKu<span class="text-[#D63333] animate-pulse inline-block font-extrabold">.</span>
+                </h1>
+                <div class="logo-subtitle mt-1">
+                    <span>b</span><span>y</span><span>&nbsp;</span><span>D</span><span>i</span><span>k</span><span>o</span><span>d</span><span>e</span><span>W</span><span>o</span><span>r</span><span>k</span><span>s</span><span class="text-[#D63333] font-bold">.</span>
+                </div>
+            </div>
+
+            <!-- RIGHT: ALL NAVIGATION & ACTION CONTROLS -->
+            <div class="hidden md:flex items-center space-x-3">
+                <!-- SLIDING PILL NAVIGATION BAR -->
+                <nav id="navPillContainer" class="relative flex items-center bg-white border border-neutral-300/80 rounded-full p-1 shadow-sm select-none">
+                    <!-- Dynamic Sliding Capsule Glider -->
+                    <div id="navGlider" class="absolute top-1 bottom-1 bg-[#141414] rounded-full transition-all duration-300 ease-out shadow-sm pointer-events-none"></div>
+
+                    <button onclick="switchTab('dashboard')" id="tab-dashboard" class="relative z-10 px-5 py-1.5 text-xs font-bold rounded-full transition-colors duration-200 text-white">
+                        Ringkasan
+                    </button>
+
+                    <!-- DROPDOWN PENCATATAN -->
+                    <div class="relative z-10 inline-block text-left" id="pencatatanDropdownContainer">
+                        <button onclick="togglePencatatanDropdown()" id="tab-pencatatan" class="px-5 py-1.5 text-xs font-bold rounded-full transition-colors duration-200 text-neutral-600 inline-flex items-center space-x-1.5">
+                            <span id="pencatatanLabel">Pencatatan</span>
+                            <i data-lucide="chevron-down" class="w-3.5 h-3.5"></i>
+                        </button>
+
+                        <div id="pencatatanMenu" class="hidden absolute right-0 mt-2 w-48 rounded-2xl bg-white border border-neutral-200 shadow-xl py-1.5 z-50 text-xs font-medium">
+                            <button onclick="selectPencatatanSubTab('vehicles')" class="w-full text-left px-4 py-2 hover:bg-neutral-100 text-[#141414] flex items-center space-x-2">
+                                <i data-lucide="car" class="w-4 h-4 text-[#D63333]"></i>
+                                <span>Kendaraan</span>
+                            </button>
+                            <button onclick="selectPencatatanSubTab('service')" class="w-full text-left px-4 py-2 hover:bg-neutral-100 text-[#141414] flex items-center space-x-2">
+                                <i data-lucide="wrench" class="w-4 h-4 text-[#D63333]"></i>
+                                <span>Servis</span>
+                            </button>
+                            <button onclick="selectPencatatanSubTab('pajak')" class="w-full text-left px-4 py-2 hover:bg-neutral-100 text-[#141414] flex items-center space-x-2">
+                                <i data-lucide="receipt" class="w-4 h-4 text-[#D63333]"></i>
+                                <span>Pajak</span>
+                            </button>
+                            <button onclick="selectPencatatanSubTab('sim')" class="w-full text-left px-4 py-2 hover:bg-neutral-100 text-[#141414] flex items-center space-x-2">
+                                <i data-lucide="id-card" class="w-4 h-4 text-[#D63333]"></i>
+                                <span>SIM</span>
+                            </button>
+                        </div>
+                    </div>
+                </nav>
+
+                <!-- PENGATURAN BUTTON -->
+                <button onclick="openSettingsModal()" class="inline-flex items-center space-x-1.5 px-4 py-1.5 text-xs font-bold rounded-full border border-neutral-300/80 hover:bg-neutral-100 transition shadow-sm bg-white text-[#141414]">
+                    <i data-lucide="settings" class="w-3.5 h-3.5"></i>
+                    <span>Pengaturan</span>
+                </button>
+            </div>
+
+            <!-- MOBILE RIGHT ACTION CONTROLS -->
+            <div class="flex md:hidden items-center space-x-2">
+                <button onclick="openSettingsModal()" class="inline-flex items-center space-x-1 px-3 py-1.5 text-xs font-bold rounded-full border border-neutral-300 bg-white text-[#141414]">
+                    <i data-lucide="settings" class="w-3.5 h-3.5"></i>
+                    <span>Pengaturan</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- MOBILE NAVIGATION (RIGHT ALIGNED) -->
+        <div class="flex md:hidden items-center justify-end space-x-2 overflow-x-auto no-scrollbar pt-3 mt-2 border-t border-neutral-200/60">
+            <button onclick="switchTab('dashboard')" id="tab-dashboard-mobile" class="px-4 py-1 text-xs font-bold rounded-full whitespace-nowrap bg-[#141414] text-white">Ringkasan</button>
+            <div class="relative inline-block">
+                <button onclick="toggleMobilePencatatanDropdown()" id="tab-pencatatan-mobile" class="px-4 py-1 text-xs font-bold rounded-full whitespace-nowrap inline-flex items-center space-x-1 border border-neutral-300 bg-white text-neutral-700">
+                    <span id="pencatatanLabelMobile">Pencatatan</span>
+                    <i data-lucide="chevron-down" class="w-3 h-3"></i>
+                </button>
+                <div id="pencatatanMenuMobile" class="hidden fixed left-4 right-4 mt-2 rounded-2xl bg-white border border-neutral-200 shadow-2xl py-2 z-50 text-xs font-medium">
+                    <button onclick="selectPencatatanSubTab('vehicles')" class="w-full text-left px-4 py-2.5 hover:bg-neutral-100 flex items-center space-x-2 text-[#141414]">
+                        <i data-lucide="car" class="w-4 h-4 text-[#D63333]"></i>
+                        <span>Kendaraan</span>
+                    </button>
+                    <button onclick="selectPencatatanSubTab('service')" class="w-full text-left px-4 py-2.5 hover:bg-neutral-100 flex items-center space-x-2 text-[#141414]">
+                        <i data-lucide="wrench" class="w-4 h-4 text-[#D63333]"></i>
+                        <span>Servis</span>
+                    </button>
+                    <button onclick="selectPencatatanSubTab('pajak')" class="w-full text-left px-4 py-2.5 hover:bg-neutral-100 flex items-center space-x-2 text-[#141414]">
+                        <i data-lucide="receipt" class="w-4 h-4 text-[#D63333]"></i>
+                        <span>Pajak</span>
+                    </button>
+                    <button onclick="selectPencatatanSubTab('sim')" class="w-full text-left px-4 py-2.5 hover:bg-neutral-100 flex items-center space-x-2 text-[#141414]">
+                        <i data-lucide="id-card" class="w-4 h-4 text-[#D63333]"></i>
+                        <span>SIM</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN DASHBOARD CONTENT -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-8 py-6 flex-1 w-full space-y-6">
+
+        <!-- TAB 1: RINGKASAN DASHBOARD -->
+        <section id="sec-dashboard" class="space-y-6">
+
+            <!-- TOP 4 STAT CARDS -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                
+                <div class="p-5 rounded-2xl border border-blue-100 dark:border-blue-950/40 bg-blue-50/50 dark:bg-blue-950/20 shadow-sm flex flex-col justify-between space-y-3">
+                    <div class="flex items-center space-x-2 text-xs font-semibold text-blue-700 dark:text-blue-300">
+                        <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+                        <span>Total Kendaraan</span>
+                    </div>
+                    <div>
+                        <div class="text-3xl font-extrabold font-mono text-[#141414] dark:text-white" id="statTotalVehicles">0</div>
+                        <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-1" id="statVehicleSub">0 Roda 2 • 0 Roda 4</p>
+                    </div>
+                </div>
+
+                <div class="p-5 rounded-2xl border border-emerald-100 dark:border-emerald-950/40 bg-emerald-50/50 dark:bg-emerald-950/20 shadow-sm flex flex-col justify-between space-y-3">
+                    <div class="flex items-center space-x-2 text-xs font-semibold text-emerald-700 dark:text-emerald-300">
+                        <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                        <span>Dokumen & Servis Aman</span>
+                    </div>
+                    <div>
+                        <div class="text-3xl font-extrabold font-mono text-emerald-700 dark:text-emerald-400" id="statAmanCount">0</div>
+                        <p class="text-xs text-emerald-600/80 dark:text-emerald-400/80 mt-1">pajak & SIM aktif > 30 hari</p>
+                    </div>
+                </div>
+
+                <div class="p-5 rounded-2xl border border-amber-100 dark:border-amber-950/40 bg-amber-50/50 dark:bg-amber-950/20 shadow-sm flex flex-col justify-between space-y-3">
+                    <div class="flex items-center space-x-2 text-xs font-semibold text-amber-800 dark:text-amber-300">
+                        <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+                        <span>Perlu Perhatian</span>
+                    </div>
+                    <div>
+                        <div class="text-3xl font-extrabold font-mono text-amber-600 dark:text-amber-400" id="statWarningCount">0</div>
+                        <p class="text-xs text-amber-700/80 dark:text-amber-400/80 mt-1" id="statWarningSub">jadwal &lt; 30 hari lagi</p>
+                    </div>
+                </div>
+
+                <div class="p-5 rounded-2xl border border-rose-100 dark:border-rose-950/40 bg-rose-50/50 dark:bg-rose-950/20 shadow-sm flex flex-col justify-between space-y-3">
+                    <div class="flex items-center space-x-2 text-xs font-semibold text-rose-700 dark:text-rose-300">
+                        <span class="w-2 h-2 rounded-full bg-[#D63333]"></span>
+                        <span>Biaya Servis (Thn Ini)</span>
+                    </div>
+                    <div>
+                        <div class="text-2xl font-extrabold font-mono text-[#141414] dark:text-white" id="statYearlyCost">Rp 0</div>
+                        <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-1">total akumulasi 12 bulan</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MIDDLE ROW (4 COLS DONUT / 8 COLS LINE CHART) -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+                <!-- LEFT CARD: STATUS DOKUMEN (DONUT CHART) -->
+                <div class="lg:col-span-4 p-6 rounded-2xl border border-neutral-200/80 dark:border-neutral-800 bg-white dark:bg-[#141414] shadow-sm flex flex-col justify-between space-y-4">
+                    <div>
+                        <h3 class="text-base font-extrabold text-[#141414] dark:text-white">
+                            Status Dokumen<span class="text-[#D63333]">.</span>
+                        </h3>
+                        <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">Ringkasan status Pajak & SIM terdaftar</p>
+                    </div>
+
+                    <div class="flex items-center justify-between gap-4 my-2">
+                        <div class="w-32 h-32 relative shrink-0">
+                            <canvas id="donutChart"></canvas>
+                            <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                                <span class="text-xl font-extrabold font-mono text-[#141414] dark:text-white" id="donutTotalCount">0</span>
+                                <span class="text-[9px] uppercase font-semibold text-neutral-400">Total</span>
+                            </div>
+                        </div>
+
+                        <div class="space-y-2.5 flex-1 text-xs font-medium">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-2">
+                                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+                                    <span class="text-neutral-600 dark:text-neutral-300">Aman</span>
+                                </div>
+                                <span class="font-mono font-bold text-[#141414] dark:text-white" id="donutAman">0</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-2">
+                                    <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
+                                    <span class="text-neutral-600 dark:text-neutral-300">Segera</span>
+                                </div>
+                                <span class="font-mono font-bold text-[#141414] dark:text-white" id="donutSegera">0</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-2">
+                                    <span class="w-2.5 h-2.5 rounded-full bg-red-600"></span>
+                                    <span class="text-neutral-600 dark:text-neutral-300">Terlewat</span>
+                                </div>
+                                <span class="font-mono font-bold text-[#141414] dark:text-white" id="donutTerlewat">0</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pt-3 border-t border-neutral-100 dark:border-neutral-800 text-[11px] text-neutral-400 flex items-center justify-between">
+                        <span>Status otomatis diperbarui</span>
+                        <i data-lucide="shield-check" class="w-3.5 h-3.5 text-emerald-500"></i>
+                    </div>
+                </div>
+
+                <!-- RIGHT CARD: TREN BIAYA SERVIS (MODERN LINE CHART) -->
+                <div class="lg:col-span-8 p-6 rounded-2xl border border-neutral-200/80 dark:border-neutral-800 bg-white dark:bg-[#141414] shadow-sm flex flex-col justify-between space-y-4">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                        <div>
+                            <h3 class="text-base font-extrabold text-[#141414] dark:text-white flex items-center space-x-2">
+                                <span>Tren Biaya Servis</span>
+                                <span class="text-[#D63333]">.</span>
+                            </h3>
+                            <div class="flex items-center space-x-3 text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">
+                                <span class="flex items-center space-x-1.5">
+                                    <span class="w-2.5 h-2.5 rounded-full bg-[#D63333]"></span>
+                                    <span>Total Periode Ini: <strong id="chartPeriodTotal" class="font-mono text-[#141414] dark:text-white">Rp 0</strong></span>
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- TIME RANGE SELECTORS -->
+                        <div class="flex flex-wrap items-center gap-1 bg-[#F0F2F5] dark:bg-neutral-900 p-1 rounded-full border border-neutral-200/70 dark:border-neutral-800 text-[11px] font-semibold">
+                            <button onclick="setChartRange('3M')" id="range-3M" class="range-btn px-2.5 py-1 rounded-full transition border border-transparent">3 Bulan</button>
+                            <button onclick="setChartRange('6M')" id="range-6M" class="range-btn px-2.5 py-1 rounded-full transition border border-transparent">6 Bulan</button>
+                            <button onclick="setChartRange('1Y')" id="range-1Y" class="range-btn active px-2.5 py-1 rounded-full transition border border-transparent">1 Tahun</button>
+                            <button onclick="setChartRange('2Y')" id="range-2Y" class="range-btn px-2.5 py-1 rounded-full transition border border-transparent">2 Tahun</button>
+                            <button onclick="setChartRange('3Y')" id="range-3Y" class="range-btn px-2.5 py-1 rounded-full transition border border-transparent">3 Tahun</button>
+                        </div>
+                    </div>
+
+                    <div class="h-56 relative w-full">
+                        <canvas id="serviceChart"></canvas>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- BOTTOM ROW: FULL WIDTH TABLE CARD -->
+            <div class="p-6 rounded-2xl border border-neutral-200/80 dark:border-neutral-800 bg-white dark:bg-[#141414] shadow-sm space-y-4">
+                
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-2 border-b border-neutral-100 dark:border-neutral-800">
+                    <div>
+                        <h3 class="text-base font-extrabold text-[#141414] dark:text-white">
+                            Jadwal & Riwayat Terkini<span class="text-[#D63333]">.</span>
+                        </h3>
+                        <p class="text-xs text-neutral-500 dark:text-neutral-400">Ringkasan pengingat pajak, perpanjangan SIM, dan jadwal servis berikutnya</p>
+                    </div>
+
+                    <div class="flex flex-wrap items-center gap-2">
+                        <div class="relative flex-1 sm:w-64">
+                            <i data-lucide="search" class="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400"></i>
+                            <input type="text" id="dashSearch" onkeyup="filterDashboardTable()" placeholder="Cari kendaraan, servis, SIM..." class="w-full pl-8 pr-3 py-1.5 text-xs rounded-full border border-neutral-200 dark:border-neutral-800 bg-[#F6F7F9] dark:bg-neutral-900 text-[#141414] dark:text-white placeholder-neutral-400 outline-none focus:border-[#D63333]">
+                        </div>
+
+                        <select id="dashStatusFilter" onchange="filterDashboardTable()" class="px-3 py-1.5 text-xs rounded-full border border-neutral-200 dark:border-neutral-800 bg-[#F6F7F9] dark:bg-neutral-900 text-[#141414] dark:text-white outline-none">
+                            <option value="ALL">Semua status</option>
+                            <option value="AMAN">● Aman</option>
+                            <option value="SEGERA">● Segera</option>
+                            <option value="TERLEWAT">● Terlewat</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs">
+                        <thead class="bg-[#F6F7F9]/80 dark:bg-neutral-900/60 font-semibold text-neutral-500 dark:text-neutral-400 border-y border-neutral-200/60 dark:border-neutral-800">
+                            <tr>
+                                <th class="py-3 px-4">KATEGORI</th>
+                                <th class="py-3 px-4">ITEM / KENDARAAN</th>
+                                <th class="py-3 px-4">INFORMASI DETIL</th>
+                                <th class="py-3 px-4">STATUS</th>
+                                <th class="py-3 px-4">JATUH TEMPO</th>
+                                <th class="py-3 px-4 text-center">AKSI / REMINDER</th>
+                            </tr>
+                        </thead>
+                        <tbody id="dashTableBody" class="divide-y divide-neutral-100 dark:divide-neutral-800/80">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- TAB 2: DAFTAR KENDARAAN -->
+        <section id="sec-vehicles" class="hidden space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div>
+                    <h2 class="text-lg font-extrabold tracking-tight text-[#141414] dark:text-white">Daftar Kendaraan Saya<span class="text-[#D63333]">.</span></h2>
+                    <p class="text-xs text-neutral-500">Kelola daftar kendaraan Roda 2 & Roda 4 milik Anda.</p>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <button onclick="openVehicleModal()" class="inline-flex items-center space-x-1.5 px-4 py-2 text-xs font-semibold rounded-full bg-[#D63333] text-white hover:bg-red-700 transition shadow-sm">
+                        <i data-lucide="plus" class="w-4 h-4"></i>
+                        <span>Tambah Kendaraan</span>
+                    </button>
+                </div>
+            </div>
+
+            <div id="vehiclesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            </div>
+        </section>
+
+        <!-- TAB 3: RIWAYAT SERVIS -->
+        <section id="sec-service" class="hidden space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div>
+                    <h2 class="text-lg font-extrabold tracking-tight text-[#141414] dark:text-white">Riwayat & Catatan Servis<span class="text-[#D63333]">.</span></h2>
+                    <p class="text-xs text-neutral-500">Catat kilometer, pergantian suku cadang, dan lokasi bengkel.</p>
+                </div>
+                <button onclick="openServiceModal()" class="inline-flex items-center space-x-1.5 px-4 py-2 text-xs font-semibold rounded-full bg-[#D63333] text-white hover:bg-red-700 transition shadow-sm">
+                    <i data-lucide="plus" class="w-4 h-4"></i>
+                    <span>Tambah Catatan Servis</span>
+                </button>
+            </div>
+
+            <div class="p-3 rounded-2xl border border-neutral-200/80 dark:border-neutral-800 bg-white dark:bg-[#141414] flex flex-wrap items-center justify-between gap-3 text-xs">
+                <div class="flex items-center space-x-2">
+                    <span class="text-neutral-500 font-medium">Filter Kendaraan:</span>
+                    <select id="serviceVehicleFilter" onchange="renderServiceLogs()" class="px-3 py-1 rounded-full border border-neutral-200 dark:border-neutral-800 bg-[#F6F7F9] dark:bg-neutral-900 text-[#141414] dark:text-white outline-none">
+                        <option value="ALL">Semua Kendaraan</option>
+                    </select>
+                </div>
+                <div id="serviceLogCount" class="font-mono text-neutral-500">
+                    Total: 0 Catatan
+                </div>
+            </div>
+
+            <div class="border border-neutral-200/80 dark:border-neutral-800 rounded-2xl overflow-hidden bg-white dark:bg-[#141414] shadow-sm">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs">
+                        <thead class="bg-[#F6F7F9]/80 dark:bg-neutral-900/60 font-mono text-neutral-500 border-b border-neutral-200/80 dark:border-neutral-800">
+                            <tr>
+                                <th class="p-3.5">TANGGAL SERVIS</th>
+                                <th class="p-3.5">KENDARAAN</th>
+                                <th class="p-3.5">ODO (KM)</th>
+                                <th class="p-3.5">PEKERJAAN & SUKU CADANG</th>
+                                <th class="p-3.5">BENGKEL</th>
+                                <th class="p-3.5 text-right">BIAYA (RP)</th>
+                                <th class="p-3.5">SERVIS NEXT</th>
+                                <th class="p-3.5 text-center">AKSI</th>
+                            </tr>
+                        </thead>
+                        <tbody id="serviceLogsTableBody" class="divide-y divide-neutral-100 dark:divide-neutral-800">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 4: PAJAK KENDARAAN -->
+        <section id="sec-pajak" class="hidden space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div>
+                    <h2 class="text-lg font-extrabold tracking-tight text-[#141414] dark:text-white">Pengingat Pajak Kendaraan<span class="text-[#D63333]">.</span></h2>
+                    <p class="text-xs text-neutral-500">Pantau tenggat waktu bayar Pajak Kendaraan Bermotor (PKB).</p>
+                </div>
+                <button onclick="openTaxModal()" class="inline-flex items-center space-x-1.5 px-4 py-2 text-xs font-semibold rounded-full bg-[#D63333] text-white hover:bg-red-700 transition shadow-sm">
+                    <i data-lucide="plus" class="w-4 h-4"></i>
+                    <span>Set Pajak Kendaraan</span>
+                </button>
+            </div>
+
+            <div id="taxGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            </div>
+        </section>
+
+        <!-- TAB 5: MASA AKTIF SIM -->
+        <section id="sec-sim" class="hidden space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div>
+                    <h2 class="text-lg font-extrabold tracking-tight text-[#141414] dark:text-white">Pengingat Perpanjangan SIM<span class="text-[#D63333]">.</span></h2>
+                    <p class="text-xs text-neutral-500">Golongan SIM A, B1, B2, C, CI, CII, D, dan DI.</p>
+                </div>
+                <button onclick="openSimModal()" class="inline-flex items-center space-x-1.5 px-4 py-2 text-xs font-semibold rounded-full bg-[#D63333] text-white hover:bg-red-700 transition shadow-sm">
+                    <i data-lucide="plus" class="w-4 h-4"></i>
+                    <span>Tambah / Update SIM</span>
+                </button>
+            </div>
+
+            <div id="simGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="mt-auto border-t border-neutral-200/80 dark:border-neutral-800 bg-white dark:bg-[#141414] py-6 text-xs text-neutral-500">
+        <div class="max-w-7xl mx-auto px-4 sm:px-8 flex flex-col items-center justify-center text-center space-y-1.5">
+            <div class="font-medium text-neutral-600 dark:text-neutral-400">
+                © 2026 Garasiku<span class="text-[#D63333]">.</span> by DikodeWorks<span class="text-[#D63333]">.</span> All rights reserved.
+            </div>
+            <div class="text-neutral-400 text-[11px]">
+                Offline Vehicle Maintenance & Tax Reminders
+            </div>
+        </div>
+    </footer>
+
+    <!-- MODAL PENGATURAN -->
+    <div id="settingsModal" class="hidden fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-[#141414] border border-neutral-200 dark:border-neutral-800 rounded-2xl max-w-lg w-full p-6 space-y-5 shadow-2xl">
+            <div class="flex justify-between items-center border-b border-neutral-100 dark:border-neutral-800 pb-3">
+                <h3 class="text-base font-extrabold text-[#141414] dark:text-white">Pengaturan & Backup Data<span class="text-[#D63333]">.</span></h3>
+                <button onclick="closeSettingsModal()" class="text-neutral-400 hover:text-[#141414] dark:hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
+            </div>
+
+            <div class="p-4 rounded-xl bg-neutral-50 dark:bg-neutral-900 border border-neutral-200/60 dark:border-neutral-800 text-xs space-y-2">
+                <div class="flex items-center space-x-2 font-semibold text-[#141414] dark:text-white">
+                    <i data-lucide="info" class="w-4 h-4 text-[#D63333]"></i>
+                    <span>Maksud & Fitur Aplikasi</span>
+                </div>
+                <p class="text-neutral-500 leading-relaxed">
+                    Aplikasi ini dirancang khusus untuk mempermudah pencatatan kapan terakhir melakukan service kendaraan (Roda 2 & Roda 4), pembayaran pajak tahunan (PKB), serta perpanjangan SIM (A, B1, B2, C, CI, CII, D, DI). Data Anda disimpan 100% lokal di HP/perangkat Anda secara offline.
+                </p>
+            </div>
+
+            <div class="space-y-3 pt-1">
+                <h4 class="text-xs font-bold uppercase tracking-wider text-neutral-400">Manajemen Data JSON</h4>
+                <div class="grid grid-cols-2 gap-3">
+                    <button onclick="exportData()" class="flex items-center justify-center space-x-2 p-3 rounded-xl border border-neutral-200 dark:border-neutral-800 hover:bg-neutral-50 dark:hover:bg-neutral-800 text-xs font-semibold">
+                        <i data-lucide="download" class="w-4 h-4 text-[#D63333]"></i>
+                        <span>Export Backup JSON</span>
+                    </button>
+                    <label class="flex items-center justify-center space-x-2 p-3 rounded-xl border border-neutral-200 dark:border-neutral-800 hover:bg-neutral-50 dark:hover:bg-neutral-800 text-xs font-semibold cursor-pointer">
+                        <i data-lucide="upload" class="w-4 h-4 text-emerald-600"></i>
+                        <span>Import Backup JSON</span>
+                        <input type="file" id="importFileInput" accept=".json" class="hidden" onchange="importData(event)">
+                    </label>
+                </div>
+                <button onclick="loadSampleData()" class="w-full py-2 text-xs font-medium text-neutral-500 hover:text-[#141414] dark:hover:text-white underline text-center">
+                    Muat Ulang Data Sampel (Reset Data Demo)
+                </button>
+            </div>
+
+            <div class="pt-2 border-t border-neutral-100 dark:border-neutral-800 flex justify-end">
+                <button onclick="closeSettingsModal()" class="px-4 py-1.5 rounded-full bg-[#141414] text-white dark:bg-white dark:text-[#141414] text-xs font-semibold">Tutup</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: KENDARAAN -->
+    <div id="vehicleModal" class="hidden fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-[#141414] border border-neutral-200 dark:border-neutral-800 rounded-2xl max-w-md w-full p-6 space-y-4 shadow-xl">
+            <div class="flex justify-between items-center border-b border-neutral-100 dark:border-neutral-800 pb-3">
+                <h3 id="vehicleModalTitle" class="text-base font-extrabold text-[#141414] dark:text-white">Tambah Kendaraan</h3>
+                <button onclick="closeVehicleModal()" class="text-neutral-400 hover:text-[#141414] dark:hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
+            </div>
+            <form id="vehicleForm" onsubmit="saveVehicle(event)" class="space-y-3 text-xs">
+                <input type="hidden" id="vehId">
+                <div>
+                    <label class="block font-medium mb-1">Label Kendaraan</label>
+                    <input type="text" id="vehLabel" placeholder="misal: Motor Utamaku / Mobil Keluarga" required class="w-full p-2.5 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-[#F6F7F9] dark:bg-neutral-900 text-[#141414] dark:text-white outline-none">
+                </div>
+                <div>
+                    <label class="block font-medium mb-1">Merk & Model</label>
+                    <input type="text" id="vehModel" placeholder="misal: Honda Beat 2023 / Toyota Avanza" required class="w-full p-2.5 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-[#F6F7F9] dark:bg-neutral-900 text-[#141414] dark:text-white outline-none">
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block font-medium mb-1">Tipe Kendaraan</label>
+                        <select id="vehType" class="w-full p-2.5 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-[#F6F7F9] dark:bg-neutral-900 text-[#141414] dark:text-white outline-none">
+                            <option value="Roda 2">Roda 2 (Motor)</option>
+                            <option value="Roda 4">Roda 4 (Mobil)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block font-medium mb-1">Plat Nomor</label>
+                        <input type="text" id="vehPlate" placeholder="B 1234 XYZ" class="w-full p-2.5 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-[#F6F7F9] dark:bg-neutral-900 text-[#141414] dark:text-white outline-none uppercase font-mono">
+                    </div>
+                </div>
+                <div class="pt-3 flex justify-end space-x-2">
+                    <button type="button" onclick="closeVehicleModal()" class="px-4 py-2 rounded-full border border-neutral-200 dark:border-neutral-800">Batal</button>
+                    <button type="submit" class="px-5 py-2 rounded-full bg-[#D63333] text-white font-semibold">Simpan Kendaraan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: SERVIS -->
+    <div id="serviceModal" class="hidden fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-[#141414] border border-neutral-200 dark:border-neutral-800 rounded-2xl max-w-lg w-full p-6 space-y-4 shadow-xl max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center border-b border-neutral-100 dark:border-neutral-800 pb-3">
+                <h3 id="serviceModalTitle" class="text-base font-extrabold text-[#141414] dark:text-white">Catat Servis Kendaraan</h3>
+                <button onclick="closeServiceModal()" class="text-neutral-400 hover:text-[#141414] dark:hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
+            </div>
+            <form id="serviceForm" onsubmit="saveServiceLog(event)" class="space-y-3 text-xs">
+                <input type="hidden" id="srvId">
+                <div>
+                    <label class="block font-medium mb-1">Pilih Kendaraan</label>
+                    <select id="srvVehicleId" required class="w-full p-2.5 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-[#F6F7F9] dark:bg-neutral-900 text-[#141414] dark:text-white outline-none">
+                    </select>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block font-medium mb-1">Tanggal Servis</label>
+                        <input type="date" id="srvDate" required class="w-full p-2.5 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-[#F6F7F9] dark:bg-neutral-900 text-[#141414] dark:text-white outline-none" onchange="autoCalcNextServiceDate()">
+                    </div>
+                    <div>
+                        <label class="block font-medium mb-1">Odometer (KM)</label>
+                        <input type="number" id="srvOdometer" placeholder="15400" required class="w-full p-2.5 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-[#F6F7F9] dark:bg-neutral-900 text-[#141414] dark:text-white font-mono outline-none">
+                    </div>
+                </div>
+                <div>
+                    <label class="block font-medium mb-1">Jenis Pekerjaan</label>
+                    <input type="text" id="srvTask" placeholder="misal: Servis Berkala & Ganti Oli Mesin" required class="w-full p-2.5 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-[#F6F7F9] dark:bg-neutral-900 text-[#141414] dark:text-white outline-none">
+                </div>
+                <div>
+                    <label class="block font-medium mb-1">Suku Cadang Diganti</label>
+                    <input type="text" id="srvParts" placeholder="misal: Oli MPX2, Busi, Filter Udara" class="w-full p-2.5 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-[#F6F7F9] dark:bg-neutral-900 text-[#141414] dark:text-white outline-none">
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block font-medium mb-1">Lokasi Bengkel</label>
+                        <input type="text" id="srvLocation" placeholder="AHASS Kebayoran" class="w-full p-2.5 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-[#F6F7F9] dark:bg-neutral-900 text-[#141414] dark:text-white outline-none">
+                    </div>
+                    <div>
+                        <label class="block font-medium mb-1">Total Biaya (Rp)</label>
+                        <input type="number" id="srvCost" placeholder="150000" required class="w-full p-2.5 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-[#F6F7F9] dark:bg-neutral-900 text-[#141414] dark:text-white font-mono outline-none">
+                    </div>
+                </div>
+                <div>
+                    <label class="block font-medium mb-1">Estimasi Servis Berikutnya</label>
+                    <input type="date" id="srvNextDate" required class="w-full p-2.5 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-[#F6F7F9] dark:bg-neutral-900 text-[#141414] dark:text-white outline-none">
+                </div>
+
+                <div class="pt-3 flex justify-end space-x-2">
+                    <button type="button" onclick="closeServiceModal()" class="px-4 py-2 rounded-full border border-neutral-200 dark:border-neutral-800">Batal</button>
+                    <button type="submit" class="px-5 py-2 rounded-full bg-[#D63333] text-white font-semibold">Simpan Riwayat</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: PAJAK -->
+    <div id="taxModal" class="hidden fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-[#141414] border border-neutral-200 dark:border-neutral-800 rounded-2xl max-w-md w-full p-6 space-y-4 shadow-xl">
+            <div class="flex justify-between items-center border-b border-neutral-100 dark:border-neutral-800 pb-3">
+                <h3 id="taxModalTitle" class="text-base font-extrabold text-[#141414] dark:text-white">Atur Pajak Kendaraan</h3>
+                <button onclick="closeTaxModal()" class="text-neutral-400 hover:text-[#141414] dark:hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
+            </div>
+            <form id="taxForm" onsubmit="saveTaxRecord(event)" class="space-y-3 text-xs">
+                <input type="hidden" id="taxId">
+                <div>
+                    <label class="block font-medium mb-1">Pilih Kendaraan</label>
+                    <select id="taxVehicleId" required class="w-full p-2.5 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-[#F6F7F9] dark:bg-neutral-900 text-[#141414] dark:text-white outline-none">
+                    </select>
+                </div>
+                <div>
+                    <label class="block font-medium mb-1">Tanggal Bayar Pajak Terakhir</label>
+                    <input type="date" id="taxLastDate" required class="w-full p-2.5 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-[#F6F7F9] dark:bg-neutral-900 text-[#141414] dark:text-white outline-none" onchange="autoCalcTaxDueDate()">
+                </div>
+                <div>
+                    <label class="block font-medium mb-1">Jatuh Tempo Berikutnya (+1 Tahun)</label>
+                    <input type="date" id="taxDueDate" required class="w-full p-2.5 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-[#F6F7F9] dark:bg-neutral-900 text-[#141414] dark:text-white outline-none">
+                </div>
+                <div>
+                    <label class="block font-medium mb-1">Nominal Pajak PKB (Rp)</label>
+                    <input type="number" id="taxAmount" placeholder="350000" class="w-full p-2.5 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-[#F6F7F9] dark:bg-neutral-900 text-[#141414] dark:text-white font-mono outline-none">
+                </div>
+
+                <div class="pt-3 flex justify-end space-x-2">
+                    <button type="button" onclick="closeTaxModal()" class="px-4 py-2 rounded-full border border-neutral-200 dark:border-neutral-800">Batal</button>
+                    <button type="submit" class="px-5 py-2 rounded-full bg-[#D63333] text-white font-semibold">Simpan Pajak</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: SIM -->
+    <div id="simModal" class="hidden fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-[#141414] border border-neutral-200 dark:border-neutral-800 rounded-2xl max-w-md w-full p-6 space-y-4 shadow-xl">
+            <div class="flex justify-between items-center border-b border-neutral-100 dark:border-neutral-800 pb-3">
+                <h3 id="simModalTitle" class="text-base font-extrabold text-[#141414] dark:text-white">Atur Masa SIM</h3>
+                <button onclick="closeSimModal()" class="text-neutral-400 hover:text-[#141414] dark:hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
+            </div>
+            <form id="simForm" onsubmit="saveSimRecord(event)" class="space-y-3 text-xs">
+                <input type="hidden" id="simId">
+                <div>
+                    <label class="block font-medium mb-1">Golongan SIM</label>
+                    <select id="simType" required class="w-full p-2.5 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-[#F6F7F9] dark:bg-neutral-900 text-[#141414] dark:text-white font-semibold outline-none">
+                        <option value="SIM A">SIM A (Mobil Penumpang/Barang)</option>
+                        <option value="SIM B1">SIM B1 (Mobil Bus/Barang > 3.500 kg)</option>
+                        <option value="SIM B2">SIM B2 (Alat Berat/Truk Gandeng)</option>
+                        <option value="SIM C">SIM C (Sepeda Motor s.d. 250 cc)</option>
+                        <option value="SIM CI">SIM CI (Sepeda Motor 250 - 500 cc)</option>
+                        <option value="SIM CII">SIM CII (Sepeda Motor > 500 cc)</option>
+                        <option value="SIM D">SIM D (Disabilitas Roda 3)</option>
+                        <option value="SIM DI">SIM DI (Disabilitas Roda 4)</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block font-medium mb-1">Nama Pemilik SIM</label>
+                    <input type="text" id="simOwner" placeholder="Nama sesuai SIM" class="w-full p-2.5 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-[#F6F7F9] dark:bg-neutral-900 text-[#141414] dark:text-white outline-none">
+                </div>
+                <div>
+                    <label class="block font-medium mb-1">Tanggal Terbit / Perpanjang Lalu</label>
+                    <input type="date" id="simIssueDate" required class="w-full p-2.5 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-[#F6F7F9] dark:bg-neutral-900 text-[#141414] dark:text-white outline-none" onchange="autoCalcSimExpiryDate()">
+                </div>
+                <div>
+                    <label class="block font-medium mb-1">Masa Kadaluarsa SIM (+5 Tahun)</label>
+                    <input type="date" id="simExpiryDate" required class="w-full p-2.5 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-[#F6F7F9] dark:bg-neutral-900 text-[#141414] dark:text-white outline-none">
+                </div>
+
+                <div class="pt-3 flex justify-end space-x-2">
+                    <button type="button" onclick="closeSimModal()" class="px-4 py-2 rounded-full border border-neutral-200 dark:border-neutral-800">Batal</button>
+                    <button type="submit" class="px-5 py-2 rounded-full bg-[#D63333] text-white font-semibold">Simpan SIM</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT APP LOGIC -->
+    <script>
+        const STORAGE_KEY = 'garasiku_pwa_data';
+
+        let appData = {
+            vehicles: [],
+            serviceLogs: [],
+            taxRecords: [],
+            simRecords: []
+        };
+
+        let barChartInstance = null;
+        let donutChartInstance = null;
+        let activeChartRange = '1Y';
+        let currentActiveTab = 'dashboard';
+
+        const SAMPLE_DATA = {
+            vehicles: [
+                { id: 'v_1', label: 'Motor Utama', model: 'Honda Beat Deluxe 2023', type: 'Roda 2', plate: 'B 4120 KDB' },
+                { id: 'v_2', label: 'Mobil Keluarga', model: 'Toyota Avanza Veloz 2022', type: 'Roda 4', plate: 'B 1899 DKW' }
+            ],
+            serviceLogs: [
+                { id: 's_1', vehicleId: 'v_1', date: '2026-01-10', odometer: 12500, task: 'Servis Rutin & Ganti Oli MPX2', parts: 'Oli Mesin MPX2, Busi', location: 'AHASS Kebayoran', cost: 145000, nextDate: '2026-04-10' },
+                { id: 's_2', vehicleId: 'v_2', date: '2026-02-05', odometer: 24300, task: 'Servis 20.000 KM & Tune Up', parts: 'Oli TMO 5W-30, Filter Oli, Filter Udara', location: 'Auto2000 Radio Dalam', cost: 1250000, nextDate: '2026-08-05' },
+                { id: 's_3', vehicleId: 'v_1', date: '2025-10-12', odometer: 9800, task: 'Ganti Ban Belakang', parts: 'Ban FDR Sport Zevo 90/90-14', location: 'Planet Ban', cost: 310000, nextDate: '2026-01-10' },
+                { id: 's_4', vehicleId: 'v_2', date: '2025-08-20', odometer: 18000, task: 'Ganti Kampas Rem Depan', parts: 'Brake Pad Original Toyota', location: 'Auto2000', cost: 680000, nextDate: '2026-02-05' }
+            ],
+            taxRecords: [
+                { id: 't_1', vehicleId: 'v_1', lastDate: '2025-11-20', dueDate: '2026-11-20', amount: 320000 },
+                { id: 't_2', vehicleId: 'v_2', lastDate: '2025-12-15', dueDate: '2026-12-15', amount: 3850000 }
+            ],
+            simRecords: [
+                { id: 'sim_1', type: 'SIM C', owner: 'Pengguna DikodeWorks', issueDate: '2023-05-14', expiryDate: '2028-05-14' },
+                { id: 'sim_2', type: 'SIM A', owner: 'Pengguna DikodeWorks', issueDate: '2022-08-10', expiryDate: '2027-08-10' }
+            ]
+        };
+
+        window.addEventListener('DOMContentLoaded', () => {
+            initApp();
+            
+            // Outside click handler for dropdowns
+            document.addEventListener('click', (e) => {
+                const pencatatanContainer = document.getElementById('pencatatanDropdownContainer');
+                const pencatatanMenu = document.getElementById('pencatatanMenu');
+                if (pencatatanContainer && !pencatatanContainer.contains(e.target)) {
+                    pencatatanMenu?.classList.add('hidden');
+                }
+                const mobileMenu = document.getElementById('pencatatanMenuMobile');
+                const mobileBtn = document.getElementById('tab-pencatatan-mobile');
+                if (mobileMenu && !mobileMenu.contains(e.target) && !mobileBtn?.contains(e.target)) {
+                    mobileMenu?.classList.add('hidden');
+                }
+            });
+
+            window.addEventListener('resize', updateNavGlider);
+            setTimeout(updateNavGlider, 50);
+        });
+
+        function updateNavGlider() {
+            const container = document.getElementById('navPillContainer');
+            const glider = document.getElementById('navGlider');
+            if (!container || !glider) return;
+
+            const isPencatatan = ['vehicles', 'service', 'pajak', 'sim'].includes(currentActiveTab);
+            const activeId = isPencatatan ? 'tab-pencatatan' : 'tab-dashboard';
+            const activeBtn = document.getElementById(activeId);
+
+            if (activeBtn) {
+                const containerRect = container.getBoundingClientRect();
+                const btnRect = activeBtn.getBoundingClientRect();
+
+                glider.style.width = `${btnRect.width}px`;
+                glider.style.left = `${btnRect.left - containerRect.left}px`;
+            }
+
+            const dashBtn = document.getElementById('tab-dashboard');
+            const pencatatanBtn = document.getElementById('tab-pencatatan');
+
+            if (isPencatatan) {
+                pencatatanBtn?.classList.remove('text-neutral-600');
+                pencatatanBtn?.classList.add('text-white');
+                dashBtn?.classList.remove('text-white');
+                dashBtn?.classList.add('text-neutral-600');
+            } else {
+                dashBtn?.classList.remove('text-neutral-600');
+                dashBtn?.classList.add('text-white');
+                pencatatanBtn?.classList.remove('text-white');
+                pencatatanBtn?.classList.add('text-neutral-600');
+            }
+        }
+
+        function initApp() {
+            const raw = localStorage.getItem(STORAGE_KEY);
+            if (raw) {
+                try {
+                    appData = JSON.parse(raw);
+                } catch (e) {
+                    appData = SAMPLE_DATA;
+                }
+            } else {
+                appData = SAMPLE_DATA;
+                saveToStorage();
+            }
+            populateDropdowns();
+            renderAll();
+        }
+
+        function saveToStorage() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
+        }
+
+        function loadSampleData() {
+            appData = JSON.parse(JSON.stringify(SAMPLE_DATA));
+            saveToStorage();
+            populateDropdowns();
+            renderAll();
+            closeSettingsModal();
+        }
+
+        function togglePencatatanDropdown() {
+            const menu = document.getElementById('pencatatanMenu');
+            if (menu) menu.classList.toggle('hidden');
+        }
+
+        function toggleMobilePencatatanDropdown() {
+            const menu = document.getElementById('pencatatanMenuMobile');
+            if (menu) menu.classList.toggle('hidden');
+        }
+
+        function selectPencatatanSubTab(tabName) {
+            document.getElementById('pencatatanMenu')?.classList.add('hidden');
+            document.getElementById('pencatatanMenuMobile')?.classList.add('hidden');
+            switchTab(tabName);
+        }
+
+        function switchTab(tabName) {
+            currentActiveTab = tabName;
+            const tabs = ['dashboard', 'vehicles', 'service', 'pajak', 'sim'];
+            const pencatatanSubtabs = ['vehicles', 'service', 'pajak', 'sim'];
+
+            tabs.forEach(t => {
+                const sec = document.getElementById(`sec-${t}`);
+                if (sec) {
+                    if (t === tabName) sec.classList.remove('hidden');
+                    else sec.classList.add('hidden');
+                }
+            });
+
+            const pencatatanLabel = document.getElementById('pencatatanLabel');
+            const pencatatanLabelMobile = document.getElementById('pencatatanLabelMobile');
+            const dashBtnMobile = document.getElementById('tab-dashboard-mobile');
+            const pencatatanBtnMobile = document.getElementById('tab-pencatatan-mobile');
+
+            const isPencatatan = pencatatanSubtabs.includes(tabName);
+
+            if (tabName === 'dashboard') {
+                if (pencatatanLabel) pencatatanLabel.innerText = 'Pencatatan';
+                if (pencatatanLabelMobile) pencatatanLabelMobile.innerText = 'Pencatatan';
+                if (dashBtnMobile) {
+                    dashBtnMobile.className = "px-4 py-1 text-xs font-bold rounded-full whitespace-nowrap bg-[#141414] text-white";
+                }
+                if (pencatatanBtnMobile) {
+                    pencatatanBtnMobile.className = "px-4 py-1 text-xs font-bold rounded-full whitespace-nowrap inline-flex items-center space-x-1 border border-neutral-300 bg-white text-neutral-700";
+                }
+            } else if (isPencatatan) {
+                const names = { vehicles: 'Kendaraan', service: 'Servis', pajak: 'Pajak', sim: 'SIM' };
+                if (pencatatanLabel) pencatatanLabel.innerText = `Pencatatan (${names[tabName]})`;
+                if (pencatatanLabelMobile) pencatatanLabelMobile.innerText = names[tabName];
+                if (dashBtnMobile) {
+                    dashBtnMobile.className = "px-4 py-1 text-xs font-bold rounded-full whitespace-nowrap border border-neutral-300 bg-white text-neutral-700";
+                }
+                if (pencatatanBtnMobile) {
+                    pencatatanBtnMobile.className = "px-4 py-1 text-xs font-bold rounded-full whitespace-nowrap inline-flex items-center space-x-1 bg-[#141414] text-white";
+                }
+            }
+
+            updateNavGlider();
+
+            if (tabName === 'dashboard') {
+                renderDashboardCharts();
+                filterDashboardTable();
+            }
+        }
+
+        function renderAll() {
+            populateDropdowns();
+            renderVehicles();
+            renderServiceLogs();
+            renderTaxRecords();
+            renderSimRecords();
+            renderDashboardCharts();
+            filterDashboardTable();
+        }
+
+        function populateDropdowns() {
+            const srvVehSelect = document.getElementById('srvVehicleId');
+            const taxVehSelect = document.getElementById('taxVehicleId');
+            const filterVehSelect = document.getElementById('serviceVehicleFilter');
+
+            let optionsHtml = appData.vehicles.map(v => 
+                `<option value="${v.id}">${v.label} — ${v.model} (${v.type})</option>`
+            ).join('');
+
+            if (srvVehSelect) srvVehSelect.innerHTML = optionsHtml;
+            if (taxVehSelect) taxVehSelect.innerHTML = optionsHtml;
+            if (filterVehSelect) {
+                const cur = filterVehSelect.value;
+                filterVehSelect.innerHTML = `<option value="ALL">Semua Kendaraan</option>` + optionsHtml;
+                filterVehSelect.value = cur || 'ALL';
+            }
+        }
+
+        function setChartRange(range) {
+            activeChartRange = range;
+            ['3M', '6M', '1Y', '2Y', '3Y'].forEach(r => {
+                const btn = document.getElementById(`range-${r}`);
+                if (btn) {
+                    if (r === range) btn.classList.add('active');
+                    else btn.classList.remove('active');
+                }
+            });
+            renderServiceChart();
+        }
+
+        // --- DASHBOARD CHARTS & SUMMARY STATS ---
+        function renderDashboardCharts() {
+            // Stat 1: Total Kendaraan
+            const totalVeh = appData.vehicles.length;
+            const r2Count = appData.vehicles.filter(v => v.type === 'Roda 2').length;
+            const r4Count = appData.vehicles.filter(v => v.type === 'Roda 4').length;
+            document.getElementById('statTotalVehicles').innerText = totalVeh;
+            document.getElementById('statVehicleSub').innerText = `${r2Count} Roda 2 • ${r4Count} Roda 4`;
+
+            // Calculate status breakdown across Tax, SIM & Service Next
+            let amanCount = 0;
+            let warningCount = 0;
+            let terlewatCount = 0;
+
+            const checkStatus = (dateStr) => {
+                if (!dateStr) return 'NONE';
+                const diff = getDaysDifference(dateStr);
+                if (diff < 0) return 'TERLEWAT';
+                if (diff <= 30) return 'SEGERA';
+                return 'AMAN';
+            };
+
+            appData.taxRecords.forEach(t => {
+                const st = checkStatus(t.dueDate);
+                if (st === 'AMAN') amanCount++;
+                else if (st === 'SEGERA') warningCount++;
+                else if (st === 'TERLEWAT') terlewatCount++;
+            });
+
+            appData.simRecords.forEach(s => {
+                const st = checkStatus(s.expiryDate);
+                if (st === 'AMAN') amanCount++;
+                else if (st === 'SEGERA') warningCount++;
+                else if (st === 'TERLEWAT') terlewatCount++;
+            });
+
+            document.getElementById('statAmanCount').innerText = amanCount;
+            document.getElementById('statWarningCount').innerText = warningCount + terlewatCount;
+            document.getElementById('statWarningSub').innerText = terlewatCount > 0 ? `${terlewatCount} terlewat, ${warningCount} < 30 hr` : `jadwal < 30 hari lagi`;
+
+            // Stat 4: Yearly Service Cost (Current Calendar Year)
+            const currentYear = new Date().getFullYear();
+            const yearlyTotal = appData.serviceLogs
+                .filter(log => log.date && new Date(log.date).getFullYear() === currentYear)
+                .reduce((sum, log) => sum + (Number(log.cost) || 0), 0);
+            document.getElementById('statYearlyCost').innerText = formatRupiah(yearlyTotal);
+
+            // Donut Chart Setup
+            const donutTotal = amanCount + warningCount + terlewatCount;
+            document.getElementById('donutTotalCount').innerText = donutTotal;
+            document.getElementById('donutAman').innerText = amanCount;
+            document.getElementById('donutSegera').innerText = warningCount;
+            document.getElementById('donutTerlewat').innerText = terlewatCount;
+
+            renderDonutChart(amanCount, warningCount, terlewatCount);
+            renderServiceChart();
+        }
+
+        function renderDonutChart(aman, segera, terlewat) {
+            const ctx = document.getElementById('donutChart');
+            if (!ctx) return;
+
+            if (donutChartInstance) donutChartInstance.destroy();
+
+            const dataValues = (aman === 0 && segera === 0 && terlewat === 0) ? [1] : [aman, segera, terlewat];
+            const colors = (aman === 0 && segera === 0 && terlewat === 0) ? ['#e5e5e5'] : ['#10b981', '#f59e0b', '#dc2626'];
+
+            donutChartInstance = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Aman', 'Segera', 'Terlewat'],
+                    datasets: [{
+                        data: dataValues,
+                        backgroundColor: colors,
+                        borderWidth: 2,
+                        borderColor: '#ffffff',
+                        hoverOffset: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '75%',
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: { enabled: (aman + segera + terlewat) > 0 }
+                    }
+                }
+            });
+        }
+
+        function renderServiceChart() {
+            const ctx = document.getElementById('serviceChart');
+            if (!ctx) return;
+
+            const now = new Date();
+            let monthsCount = 12;
+            if (activeChartRange === '3M') monthsCount = 3;
+            else if (activeChartRange === '6M') monthsCount = 6;
+            else if (activeChartRange === '1Y') monthsCount = 12;
+            else if (activeChartRange === '2Y') monthsCount = 24;
+            else if (activeChartRange === '3Y') monthsCount = 36;
+
+            const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+            const labels = [];
+            const dataMap = {};
+
+            for (let i = monthsCount - 1; i >= 0; i--) {
+                const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+                const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+                const label = monthsCount > 12 ? `${monthNames[d.getMonth()]} '${String(d.getFullYear()).slice(2)}` : monthNames[d.getMonth()];
+                labels.push({ key, label });
+                dataMap[key] = 0;
+            }
+
+            let periodTotal = 0;
+            appData.serviceLogs.forEach(log => {
+                if (log.date) {
+                    const key = log.date.substring(0, 7);
+                    if (dataMap.hasOwnProperty(key)) {
+                        const cost = Number(log.cost) || 0;
+                        dataMap[key] += cost;
+                        periodTotal += cost;
+                    }
+                }
+            });
+
+            document.getElementById('chartPeriodTotal').innerText = formatRupiah(periodTotal);
+
+            const values = labels.map(l => dataMap[l.key]);
+            const chartLabels = labels.map(l => l.label);
+
+            if (barChartInstance) barChartInstance.destroy();
+
+            const textColor = '#666666';
+            const gridColor = '#e5e5e5';
+
+            const canvasCtx = ctx.getContext('2d');
+            const gradient = canvasCtx.createLinearGradient(0, 0, 0, 200);
+            gradient.addColorStop(0, 'rgba(214, 51, 51, 0.35)');
+            gradient.addColorStop(1, 'rgba(214, 51, 51, 0.0)');
+
+            barChartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: chartLabels,
+                    datasets: [{
+                        label: `Biaya Servis`,
+                        data: values,
+                        borderColor: '#D63333',
+                        borderWidth: 2.5,
+                        backgroundColor: gradient,
+                        fill: true,
+                        tension: 0.4,
+                        pointBackgroundColor: '#D63333',
+                        pointBorderColor: '#ffffff',
+                        pointBorderWidth: 2,
+                        pointRadius: monthsCount > 12 ? 3 : 4,
+                        pointHoverRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: '#ffffff',
+                            titleColor: '#141414',
+                            bodyColor: '#D63333',
+                            borderColor: '#e5e5e5',
+                            borderWidth: 1,
+                            padding: 10,
+                            displayColors: false,
+                            callbacks: {
+                                label: (context) => ` Biaya: ${formatRupiah(context.raw)}`
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: { display: false },
+                            ticks: { color: textColor, font: { size: 10, family: 'Plus Jakarta Sans' } }
+                        },
+                        y: {
+                            grid: { color: gridColor },
+                            ticks: {
+                                color: textColor,
+                                font: { size: 10, family: 'JetBrains Mono' },
+                                callback: (v) => v >= 1000000 ? `${v/1000000}JT` : (v >= 1000 ? `${v/1000}K` : v)
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function filterDashboardTable() {
+            const search = (document.getElementById('dashSearch')?.value || '').toLowerCase();
+            const statusFilter = document.getElementById('dashStatusFilter')?.value || 'ALL';
+            const tbody = document.getElementById('dashTableBody');
+
+            let items = [];
+
+            // Add Pajak items
+            appData.taxRecords.forEach(t => {
+                const veh = appData.vehicles.find(v => v.id === t.vehicleId);
+                const diff = getDaysDifference(t.dueDate);
+                let status = 'AMAN';
+                if (diff < 0) status = 'TERLEWAT';
+                else if (diff <= 30) status = 'SEGERA';
+
+                items.push({
+                    kategori: 'Pajak PKB',
+                    title: veh ? veh.model : 'Kendaraan Dihapus',
+                    detail: `Plat: ${veh?.plate||'-'} • Estimasi: ${formatRupiah(t.amount)}`,
+                    status: status,
+                    dueDate: t.dueDate,
+                    diff: diff,
+                    gcalUrl: generateGoogleCalendarUrl(`Bayar Pajak: ${veh?.model}`, `Estimasi PKB: ${formatRupiah(t.amount)}`, t.dueDate)
+                });
+            });
+
+            // Add SIM items
+            appData.simRecords.forEach(s => {
+                const diff = getDaysDifference(s.expiryDate);
+                let status = 'AMAN';
+                if (diff < 0) status = 'TERLEWAT';
+                else if (diff <= 30) status = 'SEGERA';
+
+                items.push({
+                    kategori: 'Perpanjangan SIM',
+                    title: `${s.type} (${s.owner||'Pemilik'})`,
+                    detail: `Terbit: ${formatIndoDate(s.issueDate)}`,
+                    status: status,
+                    dueDate: s.expiryDate,
+                    diff: diff,
+                    gcalUrl: generateGoogleCalendarUrl(`Perpanjang ${s.type}`, `Perpanjangan SIM untuk ${s.owner||'-'}`, s.expiryDate)
+                });
+            });
+
+            // Filter
+            if (search) {
+                items = items.filter(i => i.title.toLowerCase().includes(search) || i.kategori.toLowerCase().includes(search) || i.detail.toLowerCase().includes(search));
+            }
+            if (statusFilter !== 'ALL') {
+                items = items.filter(i => i.status === statusFilter);
+            }
+
+            // Sort by nearest due date
+            items.sort((a,b) => new Date(a.dueDate) - new Date(b.dueDate));
+
+            if (items.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" class="py-8 text-center text-neutral-400">Tidak ada jadwal atau data pengingat.</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = items.map(item => {
+                let statusBadge = '';
+                if (item.status === 'TERLEWAT') {
+                    statusBadge = `<span class="inline-flex items-center space-x-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-red-100 text-red-800 dark:bg-red-950 dark:text-red-300"><span class="w-1.5 h-1.5 rounded-full bg-red-600"></span><span>Terlewat (${Math.abs(item.diff)} hr)</span></span>`;
+                } else if (item.status === 'SEGERA') {
+                    statusBadge = `<span class="inline-flex items-center space-x-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-900 dark:bg-amber-950 dark:text-amber-200"><span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span><span>Segera (${item.diff} hr)</span></span>`;
+                } else {
+                    statusBadge = `<span class="inline-flex items-center space-x-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span><span>Aman (${item.diff} hr)</span></span>`;
+                }
+
+                return `
+                    <tr class="hover:bg-neutral-50 dark:hover:bg-neutral-900/40 transition">
+                        <td class="py-3 px-4 font-mono text-[11px] font-bold text-neutral-500">${item.kategori}</td>
+                        <td class="py-3 px-4 font-bold text-[#141414] dark:text-white">${item.title}</td>
+                        <td class="py-3 px-4 text-neutral-500">${item.detail}</td>
+                        <td class="py-3 px-4">${statusBadge}</td>
+                        <td class="py-3 px-4 font-mono font-semibold">${formatIndoDate(item.dueDate)}</td>
+                        <td class="py-3 px-4 text-center">
+                            <a href="${item.gcalUrl}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center space-x-1 px-3 py-1 rounded-full border border-neutral-200 dark:border-neutral-700 text-[11px] font-medium hover:bg-neutral-100 dark:hover:bg-neutral-800 transition">
+                                <i data-lucide="calendar-plus" class="w-3.5 h-3.5 text-[#D63333]"></i>
+                                <span>+GCal</span>
+                            </a>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+            lucide.createIcons();
+        }
+
+        // --- VEHICLES TAB ---
+        function renderVehicles() {
+            const grid = document.getElementById('vehiclesGrid');
+            if (appData.vehicles.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-full py-12 text-center border border-dashed border-neutral-300 dark:border-neutral-700 rounded-2xl">
+                        <i data-lucide="car" class="w-8 h-8 mx-auto text-neutral-400 mb-2"></i>
+                        <p class="text-xs text-neutral-500">Belum ada kendaraan yang terdaftar.</p>
+                        <button onclick="openVehicleModal()" class="mt-3 px-4 py-1.5 text-xs font-semibold rounded-full bg-[#D63333] text-white">Tambah Kendaraan Pertama</button>
+                    </div>
+                `;
+                return;
+            }
+
+            grid.innerHTML = appData.vehicles.map(v => {
+                const logsCount = appData.serviceLogs.filter(s => s.vehicleId === v.id).length;
+                const taxRec = appData.taxRecords.find(t => t.vehicleId === v.id);
+
+                return `
+                    <div class="p-5 rounded-2xl border border-neutral-200/80 dark:border-neutral-800 bg-white dark:bg-[#141414] shadow-sm flex flex-col justify-between space-y-4">
+                        <div>
+                            <div class="flex items-start justify-between">
+                                <span class="text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300">
+                                    ${v.label}
+                                </span>
+                                <span class="text-xs font-semibold font-mono border border-neutral-200 dark:border-neutral-800 px-2.5 py-0.5 rounded-full">
+                                    ${v.type}
+                                </span>
+                            </div>
+                            <h3 class="text-base font-bold text-[#141414] dark:text-white mt-3">${v.model}</h3>
+                            <p class="text-xs font-mono text-neutral-500">${v.plate || 'No Plat -'}</p>
+                        </div>
+
+                        <div class="pt-3 border-t border-neutral-100 dark:border-neutral-800 text-xs space-y-1.5">
+                            <div class="flex justify-between text-neutral-500">
+                                <span>Total Riwayat Servis:</span>
+                                <span class="font-mono font-bold text-[#141414] dark:text-white">${logsCount} catatan</span>
+                            </div>
+                            <div class="flex justify-between text-neutral-500">
+                                <span>Pajak Jatuh Tempo:</span>
+                                <span class="font-mono font-bold ${taxRec ? 'text-[#141414] dark:text-white' : 'text-neutral-400'}">
+                                    ${taxRec ? formatIndoDate(taxRec.dueDate) : 'Belum diatur'}
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="flex justify-end space-x-2 pt-2 border-t border-neutral-100 dark:border-neutral-800">
+                            <button onclick="editVehicle('${v.id}')" class="p-1.5 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-800 text-neutral-600 dark:text-neutral-300"><i data-lucide="edit-2" class="w-4 h-4"></i></button>
+                            <button onclick="deleteVehicle('${v.id}')" class="p-1.5 rounded-lg hover:bg-red-100 dark:hover:bg-red-950 text-red-600 dark:text-red-400"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            lucide.createIcons();
+        }
+
+        function openVehicleModal(id = null) {
+            document.getElementById('vehicleForm').reset();
+            document.getElementById('vehId').value = '';
+            document.getElementById('vehicleModalTitle').innerText = id ? 'Edit Kendaraan' : 'Tambah Kendaraan';
+
+            if (id) {
+                const v = appData.vehicles.find(item => item.id === id);
+                if (v) {
+                    document.getElementById('vehId').value = v.id;
+                    document.getElementById('vehLabel').value = v.label;
+                    document.getElementById('vehModel').value = v.model;
+                    document.getElementById('vehType').value = v.type;
+                    document.getElementById('vehPlate').value = v.plate || '';
+                }
+            } else {
+                document.getElementById('vehLabel').value = `Kendaraan ${appData.vehicles.length + 1}`;
+            }
+            document.getElementById('vehicleModal').classList.remove('hidden');
+        }
+
+        function closeVehicleModal() { document.getElementById('vehicleModal').classList.add('hidden'); }
+
+        function saveVehicle(e) {
+            e.preventDefault();
+            const id = document.getElementById('vehId').value;
+            const label = document.getElementById('vehLabel').value.trim();
+            const model = document.getElementById('vehModel').value.trim();
+            const type = document.getElementById('vehType').value;
+            const plate = document.getElementById('vehPlate').value.trim();
+
+            if (id) {
+                const index = appData.vehicles.findIndex(v => v.id === id);
+                if (index !== -1) appData.vehicles[index] = { id, label, model, type, plate };
+            } else {
+                appData.vehicles.push({ id: 'v_' + Date.now(), label, model, type, plate });
+            }
+            saveToStorage();
+            closeVehicleModal();
+            renderAll();
+        }
+
+        function editVehicle(id) { openVehicleModal(id); }
+        function deleteVehicle(id) {
+            if (confirm('Hapus kendaraan ini beserta data terkait?')) {
+                appData.vehicles = appData.vehicles.filter(v => v.id !== id);
+                appData.serviceLogs = appData.serviceLogs.filter(s => s.vehicleId !== id);
+                appData.taxRecords = appData.taxRecords.filter(t => t.vehicleId !== id);
+                saveToStorage();
+                renderAll();
+            }
+        }
+
+        // --- SERVICE TAB ---
+        function renderServiceLogs() {
+            const tableBody = document.getElementById('serviceLogsTableBody');
+            const filterVehId = document.getElementById('serviceVehicleFilter')?.value || 'ALL';
+
+            let filtered = appData.serviceLogs;
+            if (filterVehId !== 'ALL') filtered = filtered.filter(s => s.vehicleId === filterVehId);
+            filtered.sort((a,b) => new Date(b.date) - new Date(a.date));
+
+            document.getElementById('serviceLogCount').innerText = `Total: ${filtered.length} Catatan`;
+
+            if (filtered.length === 0) {
+                tableBody.innerHTML = `<tr><td colspan="8" class="p-8 text-center text-neutral-400">Belum ada riwayat servis.</td></tr>`;
+                return;
+            }
+
+            tableBody.innerHTML = filtered.map(s => {
+                const veh = appData.vehicles.find(v => v.id === s.vehicleId);
+                const gcalUrl = generateGoogleCalendarUrl(`Servis: ${veh ? veh.model : ''}`, `Bengkel: ${s.location||'-'}\nTerakhir Odo: ${s.odometer} KM`, s.nextDate);
+
+                return `
+                    <tr class="hover:bg-neutral-50 dark:hover:bg-neutral-900/40 transition">
+                        <td class="p-3.5 font-mono text-[#141414] dark:text-white">${formatIndoDate(s.date)}</td>
+                        <td class="p-3.5">
+                            <div class="font-bold text-[#141414] dark:text-white">${veh ? veh.model : 'Dihapus'}</div>
+                            <div class="text-[10px] text-neutral-400 font-mono">${veh ? veh.type + ' • ' + (veh.plate||'-') : ''}</div>
+                        </td>
+                        <td class="p-3.5 font-mono">${Number(s.odometer).toLocaleString('id-ID')} KM</td>
+                        <td class="p-3.5">
+                            <div class="font-medium text-neutral-900 dark:text-neutral-100">${s.task}</div>
+                            <div class="text-[10px] text-neutral-400">${s.parts || 'Suku cadang: -'}</div>
+                        </td>
+                        <td class="p-3.5 text-neutral-500">${s.location || '-'}</td>
+                        <td class="p-3.5 text-right font-mono font-semibold text-[#141414] dark:text-white">${formatRupiah(s.cost)}</td>
+                        <td class="p-3.5 font-mono text-neutral-600 dark:text-neutral-300">${formatIndoDate(s.nextDate)}</td>
+                        <td class="p-3.5 text-center space-x-1">
+                            <a href="${gcalUrl}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center space-x-1 px-2.5 py-1 rounded-full border border-neutral-200 dark:border-neutral-700 text-[10px] hover:bg-neutral-100">
+                                <i data-lucide="calendar-plus" class="w-3 h-3 text-[#D63333]"></i>
+                                <span>+GCal</span>
+                            </a>
+                            <button onclick="editServiceLog('${s.id}')" class="p-1 rounded hover:bg-neutral-100 text-neutral-600"><i data-lucide="edit-2" class="w-3.5 h-3.5"></i></button>
+                            <button onclick="deleteServiceLog('${s.id}')" class="p-1 rounded hover:bg-red-100 text-red-600"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+            lucide.createIcons();
+        }
+
+        function openServiceModal(id = null) {
+            if (appData.vehicles.length === 0) {
+                alert('Silakan tambahkan kendaraan terlebih dahulu.');
+                switchTab('vehicles');
+                openVehicleModal();
+                return;
+            }
+
+            document.getElementById('serviceForm').reset();
+            document.getElementById('srvId').value = '';
+            document.getElementById('serviceModalTitle').innerText = id ? 'Edit Catatan Servis' : 'Tambah Catatan Servis';
+
+            const todayStr = new Date().toISOString().split('T')[0];
+            document.getElementById('srvDate').value = todayStr;
+            autoCalcNextServiceDate();
+
+            if (id) {
+                const log = appData.serviceLogs.find(item => item.id === id);
+                if (log) {
+                    document.getElementById('srvId').value = log.id;
+                    document.getElementById('srvVehicleId').value = log.vehicleId;
+                    document.getElementById('srvDate').value = log.date;
+                    document.getElementById('srvOdometer').value = log.odometer;
+                    document.getElementById('srvTask').value = log.task;
+                    document.getElementById('srvParts').value = log.parts || '';
+                    document.getElementById('srvLocation').value = log.location || '';
+                    document.getElementById('srvCost').value = log.cost;
+                    document.getElementById('srvNextDate').value = log.nextDate;
+                }
+            }
+            document.getElementById('serviceModal').classList.remove('hidden');
+        }
+
+        function closeServiceModal() { document.getElementById('serviceModal').classList.add('hidden'); }
+
+        function autoCalcNextServiceDate() {
+            const dateVal = document.getElementById('srvDate').value;
+            if (dateVal) {
+                const d = new Date(dateVal);
+                d.setMonth(d.getMonth() + 3);
+                document.getElementById('srvNextDate').value = d.toISOString().split('T')[0];
+            }
+        }
+
+        function saveServiceLog(e) {
+            e.preventDefault();
+            const id = document.getElementById('srvId').value;
+            const vehicleId = document.getElementById('srvVehicleId').value;
+            const date = document.getElementById('srvDate').value;
+            const odometer = Number(document.getElementById('srvOdometer').value);
+            const task = document.getElementById('srvTask').value.trim();
+            const parts = document.getElementById('srvParts').value.trim();
+            const location = document.getElementById('srvLocation').value.trim();
+            const cost = Number(document.getElementById('srvCost').value);
+            const nextDate = document.getElementById('srvNextDate').value;
+
+            if (id) {
+                const idx = appData.serviceLogs.findIndex(s => s.id === id);
+                if (idx !== -1) appData.serviceLogs[idx] = { id, vehicleId, date, odometer, task, parts, location, cost, nextDate };
+            } else {
+                appData.serviceLogs.push({ id: 's_' + Date.now(), vehicleId, date, odometer, task, parts, location, cost, nextDate });
+            }
+            saveToStorage();
+            closeServiceModal();
+            renderAll();
+        }
+
+        function editServiceLog(id) { openServiceModal(id); }
+        function deleteServiceLog(id) {
+            if (confirm('Hapus catatan servis ini?')) {
+                appData.serviceLogs = appData.serviceLogs.filter(s => s.id !== id);
+                saveToStorage();
+                renderAll();
+            }
+        }
+
+        // --- TAX TAB ---
+        function renderTaxRecords() {
+            const grid = document.getElementById('taxGrid');
+            if (appData.vehicles.length === 0) {
+                grid.innerHTML = `<div class="col-span-full py-8 text-center text-neutral-400">Tambahkan kendaraan terlebih dahulu.</div>`;
+                return;
+            }
+
+            grid.innerHTML = appData.vehicles.map(v => {
+                const taxRec = appData.taxRecords.find(t => t.vehicleId === v.id);
+                const diffDays = taxRec ? getDaysDifference(taxRec.dueDate) : null;
+
+                let badgeHtml = '';
+                if (diffDays !== null) {
+                    if (diffDays < 0) badgeHtml = `<span class="px-2.5 py-0.5 rounded-full text-[10px] font-mono bg-red-100 text-red-800 dark:bg-red-950 dark:text-red-300">Terlewat ${Math.abs(diffDays)} Hr</span>`;
+                    else if (diffDays <= 30) badgeHtml = `<span class="px-2.5 py-0.5 rounded-full text-[10px] font-mono bg-amber-100 text-amber-900 dark:bg-amber-950 dark:text-amber-200">Segera (${diffDays} Hr)</span>`;
+                    else badgeHtml = `<span class="px-2.5 py-0.5 rounded-full text-[10px] font-mono bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">Sisa ${diffDays} Hr</span>`;
+                } else {
+                    badgeHtml = `<span class="px-2.5 py-0.5 rounded-full text-[10px] font-mono bg-neutral-100 text-neutral-400">Belum Diset</span>`;
+                }
+
+                const gcalUrl = taxRec ? generateGoogleCalendarUrl(`Pajak PKB: ${v.model}`, `Estimasi Pajak: ${formatRupiah(taxRec.amount||0)}`, taxRec.dueDate) : '#';
+
+                return `
+                    <div class="p-5 rounded-2xl border border-neutral-200/80 dark:border-neutral-800 bg-white dark:bg-[#141414] shadow-sm flex flex-col justify-between space-y-4">
+                        <div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs font-mono text-neutral-500">${v.label}</span>
+                                ${badgeHtml}
+                            </div>
+                            <h3 class="text-base font-bold text-[#141414] dark:text-white mt-2">${v.model}</h3>
+                            <p class="text-xs font-mono text-neutral-500">${v.plate || 'No Plat -'} • ${v.type}</p>
+                        </div>
+
+                        <div class="pt-3 border-t border-neutral-100 dark:border-neutral-800 text-xs space-y-1.5">
+                            <div class="flex justify-between text-neutral-500">
+                                <span>Pajak Terakhir:</span>
+                                <span class="font-mono font-semibold text-[#141414] dark:text-white">${taxRec ? formatIndoDate(taxRec.lastDate) : '-'}</span>
+                            </div>
+                            <div class="flex justify-between text-neutral-500">
+                                <span>Jatuh Tempo (+1 Thn):</span>
+                                <span class="font-mono font-bold text-[#141414] dark:text-white">${taxRec ? formatIndoDate(taxRec.dueDate) : '-'}</span>
+                            </div>
+                            <div class="flex justify-between text-neutral-500">
+                                <span>Estimasi PKB:</span>
+                                <span class="font-mono font-semibold text-[#141414] dark:text-white">${taxRec && taxRec.amount ? formatRupiah(taxRec.amount) : '-'}</span>
+                            </div>
+                        </div>
+
+                        <div class="pt-3 border-t border-neutral-100 dark:border-neutral-800 flex items-center justify-between">
+                            ${taxRec ? `
+                                <a href="${gcalUrl}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center space-x-1 text-xs font-medium text-neutral-700 dark:text-neutral-300 hover:underline">
+                                    <i data-lucide="calendar-plus" class="w-3.5 h-3.5 text-[#D63333]"></i>
+                                    <span>Google Calendar</span>
+                                </a>
+                            ` : '<span></span>'}
+                            <button onclick="openTaxModal('${v.id}')" class="px-3 py-1.5 text-xs font-semibold rounded-full bg-[#141414] text-white dark:bg-white dark:text-[#141414]">
+                                ${taxRec ? 'Edit Pajak' : 'Set Pajak'}
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            lucide.createIcons();
+        }
+
+        function openTaxModal(vehicleId = null) {
+            if (appData.vehicles.length === 0) return;
+            document.getElementById('taxForm').reset();
+            document.getElementById('taxId').value = '';
+
+            const vehSelect = document.getElementById('taxVehicleId');
+            if (vehicleId) vehSelect.value = vehicleId;
+
+            const selectedVehId = vehSelect.value || appData.vehicles[0].id;
+            const existing = appData.taxRecords.find(t => t.vehicleId === selectedVehId);
+
+            if (existing) {
+                document.getElementById('taxId').value = existing.id;
+                document.getElementById('taxLastDate').value = existing.lastDate;
+                document.getElementById('taxDueDate').value = existing.dueDate;
+                document.getElementById('taxAmount').value = existing.amount || '';
+            } else {
+                const todayStr = new Date().toISOString().split('T')[0];
+                document.getElementById('taxLastDate').value = todayStr;
+                autoCalcTaxDueDate();
+            }
+            document.getElementById('taxModal').classList.remove('hidden');
+        }
+
+        function closeTaxModal() { document.getElementById('taxModal').classList.add('hidden'); }
+
+        function autoCalcTaxDueDate() {
+            const lastVal = document.getElementById('taxLastDate').value;
+            if (lastVal) {
+                const d = new Date(lastVal);
+                d.setFullYear(d.getFullYear() + 1);
+                document.getElementById('taxDueDate').value = d.toISOString().split('T')[0];
+            }
+        }
+
+        function saveTaxRecord(e) {
+            e.preventDefault();
+            const id = document.getElementById('taxId').value;
+            const vehicleId = document.getElementById('taxVehicleId').value;
+            const lastDate = document.getElementById('taxLastDate').value;
+            const dueDate = document.getElementById('taxDueDate').value;
+            const amount = Number(document.getElementById('taxAmount').value) || 0;
+
+            const idx = appData.taxRecords.findIndex(t => t.vehicleId === vehicleId);
+            if (idx !== -1) appData.taxRecords[idx] = { id: appData.taxRecords[idx].id, vehicleId, lastDate, dueDate, amount };
+            else appData.taxRecords.push({ id: 't_' + Date.now(), vehicleId, lastDate, dueDate, amount });
+
+            saveToStorage();
+            closeTaxModal();
+            renderAll();
+        }
+
+        // --- SIM TAB ---
+        function renderSimRecords() {
+            const grid = document.getElementById('simGrid');
+            if (appData.simRecords.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-full py-12 text-center border border-dashed border-neutral-300 dark:border-neutral-700 rounded-2xl">
+                        <i data-lucide="id-card" class="w-8 h-8 mx-auto text-neutral-400 mb-2"></i>
+                        <p class="text-xs text-neutral-500">Belum ada pengingat SIM.</p>
+                        <button onclick="openSimModal()" class="mt-3 px-4 py-1.5 text-xs font-semibold rounded-full bg-[#D63333] text-white">Tambah SIM Pertama</button>
+                    </div>
+                `;
+                return;
+            }
+
+            grid.innerHTML = appData.simRecords.map(sim => {
+                const diffDays = getDaysDifference(sim.expiryDate);
+
+                let badgeHtml = '';
+                if (diffDays < 0) badgeHtml = `<span class="px-2.5 py-0.5 rounded-full text-[10px] font-mono bg-red-100 text-red-800 dark:bg-red-950 dark:text-red-300">Kadaluarsa</span>`;
+                else if (diffDays <= 60) badgeHtml = `<span class="px-2.5 py-0.5 rounded-full text-[10px] font-mono bg-amber-100 text-amber-900 dark:bg-amber-950 dark:text-amber-200">${diffDays} Hr Lagi</span>`;
+                else badgeHtml = `<span class="px-2.5 py-0.5 rounded-full text-[10px] font-mono bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">${diffDays} Hr Aktif</span>`;
+
+                const gcalUrl = generateGoogleCalendarUrl(`Perpanjang ${sim.type} (5 Thn)`, `Perpanjangan SIM 5 tahunan untuk ${sim.owner||'-'}`, sim.expiryDate);
+
+                return `
+                    <div class="p-5 rounded-2xl border border-neutral-200/80 dark:border-neutral-800 bg-white dark:bg-[#141414] shadow-sm flex flex-col justify-between space-y-4">
+                        <div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs font-mono font-bold px-2.5 py-0.5 rounded-full bg-[#141414] text-white dark:bg-white dark:text-[#141414]">${sim.type}</span>
+                                ${badgeHtml}
+                            </div>
+                            <h3 class="text-sm font-bold text-[#141414] dark:text-white mt-3">${sim.owner || 'Pemilik SIM'}</h3>
+                        </div>
+
+                        <div class="pt-3 border-t border-neutral-100 dark:border-neutral-800 text-xs space-y-1.5">
+                            <div class="flex justify-between text-neutral-500">
+                                <span>Terbit/Perpanjang:</span>
+                                <span class="font-mono font-semibold text-[#141414] dark:text-white">${formatIndoDate(sim.issueDate)}</span>
+                            </div>
+                            <div class="flex justify-between text-neutral-500">
+                                <span>Kadaluarsa (+5 Thn):</span>
+                                <span class="font-mono font-bold text-[#141414] dark:text-white">${formatIndoDate(sim.expiryDate)}</span>
+                            </div>
+                        </div>
+
+                        <div class="pt-3 border-t border-neutral-100 dark:border-neutral-800 flex items-center justify-between">
+                            <a href="${gcalUrl}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center space-x-1 text-xs font-medium text-neutral-700 dark:text-neutral-300 hover:underline">
+                                <i data-lucide="calendar-plus" class="w-3.5 h-3.5 text-[#D63333]"></i>
+                                <span>Google Calendar</span>
+                            </a>
+                            <div class="flex space-x-1">
+                                <button onclick="editSimRecord('${sim.id}')" class="p-1.5 rounded-lg hover:bg-neutral-100 text-neutral-600"><i data-lucide="edit-2" class="w-3.5 h-3.5"></i></button>
+                                <button onclick="deleteSimRecord('${sim.id}')" class="p-1.5 rounded-lg hover:bg-red-100 text-red-600"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            lucide.createIcons();
+        }
+
+        function openSimModal(id = null) {
+            document.getElementById('simForm').reset();
+            document.getElementById('simId').value = '';
+            document.getElementById('simModalTitle').innerText = id ? 'Edit Data SIM' : 'Tambah SIM';
+
+            const todayStr = new Date().toISOString().split('T')[0];
+            document.getElementById('simIssueDate').value = todayStr;
+            autoCalcSimExpiryDate();
+
+            if (id) {
+                const sim = appData.simRecords.find(item => item.id === id);
+                if (sim) {
+                    document.getElementById('simId').value = sim.id;
+                    document.getElementById('simType').value = sim.type;
+                    document.getElementById('simOwner').value = sim.owner || '';
+                    document.getElementById('simIssueDate').value = sim.issueDate;
+                    document.getElementById('simExpiryDate').value = sim.expiryDate;
+                }
+            }
+            document.getElementById('simModal').classList.remove('hidden');
+        }
+
+        function closeSimModal() { document.getElementById('simModal').classList.add('hidden'); }
+
+        function autoCalcSimExpiryDate() {
+            const issueVal = document.getElementById('simIssueDate').value;
+            if (issueVal) {
+                const d = new Date(issueVal);
+                d.setFullYear(d.getFullYear() + 5);
+                document.getElementById('simExpiryDate').value = d.toISOString().split('T')[0];
+            }
+        }
+
+        function saveSimRecord(e) {
+            e.preventDefault();
+            const id = document.getElementById('simId').value;
+            const type = document.getElementById('simType').value;
+            const owner = document.getElementById('simOwner').value.trim();
+            const issueDate = document.getElementById('simIssueDate').value;
+            const expiryDate = document.getElementById('simExpiryDate').value;
+
+            if (id) {
+                const idx = appData.simRecords.findIndex(s => s.id === id);
+                if (idx !== -1) appData.simRecords[idx] = { id, type, owner, issueDate, expiryDate };
+            } else {
+                appData.simRecords.push({ id: 'sim_' + Date.now(), type, owner, issueDate, expiryDate });
+            }
+            saveToStorage();
+            closeSimModal();
+            renderAll();
+        }
+
+        function editSimRecord(id) { openSimModal(id); }
+        function deleteSimRecord(id) {
+            if (confirm('Hapus data SIM ini?')) {
+                appData.simRecords = appData.simRecords.filter(s => s.id !== id);
+                saveToStorage();
+                renderAll();
+            }
+        }
+
+        // --- SETTINGS MODAL & JSON BACKUP ---
+        function openSettingsModal() { document.getElementById('settingsModal').classList.remove('hidden'); }
+        function closeSettingsModal() { document.getElementById('settingsModal').classList.add('hidden'); }
+
+        // --- UTILS ---
+        function generateGoogleCalendarUrl(title, details, dateStr) {
+            if (!dateStr) return '#';
+            const cleanDate = dateStr.replace(/-/g, '');
+            const d = new Date(dateStr);
+            d.setDate(d.getDate() + 1);
+            const nextDayStr = d.toISOString().split('T')[0].replace(/-/g, '');
+            return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(title)}&details=${encodeURIComponent(details)}&dates=${cleanDate}/${nextDayStr}`;
+        }
+
+        function formatRupiah(amount) {
+            return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(amount || 0);
+        }
+
+        function formatIndoDate(dateStr) {
+            if (!dateStr) return '-';
+            const d = new Date(dateStr);
+            return d.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
+        }
+
+        function getDaysDifference(targetDateStr) {
+            if (!targetDateStr) return 0;
+            const today = new Date(); today.setHours(0,0,0,0);
+            const target = new Date(targetDateStr); target.setHours(0,0,0,0);
+            return Math.ceil((target - today) / (1000 * 60 * 60 * 24));
+        }
+
+        function toggleTheme() {
+            document.documentElement.classList.toggle('dark');
+            renderDashboardCharts();
+        }
+
+        function exportData() {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(appData, null, 2));
+            const downloadAnchor = document.createElement('a');
+            downloadAnchor.setAttribute("href", dataStr);
+            downloadAnchor.setAttribute("download", `garasiku_backup_${new Date().toISOString().split('T')[0]}.json`);
+            document.body.appendChild(downloadAnchor);
+            downloadAnchor.click();
+            downloadAnchor.remove();
+        }
+
+        function importData(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const parsed = JSON.parse(e.target.result);
+                    if (parsed && (parsed.vehicles || parsed.serviceLogs)) {
+                        appData = {
+                            vehicles: parsed.vehicles || [],
+                            serviceLogs: parsed.serviceLogs || [],
+                            taxRecords: parsed.taxRecords || [],
+                            simRecords: parsed.simRecords || []
+                        };
+                        saveToStorage();
+                        renderAll();
+                        closeSettingsModal();
+                        alert('Data berhasil di-import!');
+                    }
+                } catch (err) { alert('Gagal membaca JSON: ' + err.message); }
+            };
+            reader.readAsText(file);
+        }
+    </script>
+</body>
+</html>
