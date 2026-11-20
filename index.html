@@ -319,7 +319,7 @@
                         <h3 class="text-base font-extrabold text-[#141414] dark:text-white">
                             Jadwal & Riwayat Terkini<span class="text-[#D63333]">.</span>
                         </h3>
-                        <p class="text-xs text-neutral-500 dark:text-neutral-400">Ringkasan pengingat pajak, perpanjangan SIM, dan jadwal servis berikutnya</p>
+                        <p class="text-xs text-neutral-500 dark:text-neutral-400">Ringkasan pengingat pajak, perpanjangan SIM, jadwal servis berikutnya, dan riwayat servis</p>
                     </div>
 
                     <div class="flex flex-wrap items-center gap-2">
@@ -333,6 +333,7 @@
                             <option value="AMAN">● Aman</option>
                             <option value="SEGERA">● Segera</option>
                             <option value="TERLEWAT">● Terlewat</option>
+                            <option value="RIWAYAT">● Riwayat</option>
                         </select>
                     </div>
                 </div>
@@ -1202,6 +1203,43 @@
                 });
             });
 
+            // Add Servis items (jadwal berikutnya + riwayat servis)
+            const latestServiceByVehicle = {};
+            appData.serviceLogs.forEach(s => {
+                const current = latestServiceByVehicle[s.vehicleId];
+                if (!current || new Date(s.date) > new Date(current.date)) latestServiceByVehicle[s.vehicleId] = s;
+            });
+
+            appData.serviceLogs.forEach(s => {
+                const veh = appData.vehicles.find(v => v.id === s.vehicleId);
+                const isLatest = latestServiceByVehicle[s.vehicleId]?.id === s.id;
+                const diff = getDaysDifference(s.nextDate);
+
+                let status = 'AMAN';
+                if (!isLatest) status = 'RIWAYAT';
+                else if (diff < 0) status = 'TERLEWAT';
+                else if (diff <= 30) status = 'SEGERA';
+
+                const taskSummary = getServiceItems(s, 'task').map(item => item.name).join(', ') || s.task || '-';
+                const partSummary = getServiceItems(s, 'part').map(item => item.name).join(', ') || s.parts || '';
+                const detailParts = [];
+                if (status !== 'RIWAYAT') detailParts.push(`Servis: ${formatIndoDate(s.date)}`);
+                detailParts.push(taskSummary);
+                if (partSummary) detailParts.push(partSummary);
+                if (s.location) detailParts.push(s.location);
+
+                items.push({
+                    kategori: 'Servis',
+                    title: veh ? veh.model : 'Kendaraan Dihapus',
+                    detail: detailParts.join(' • '),
+                    status: status,
+                    dueDate: s.nextDate,
+                    historyDate: s.date,
+                    diff: diff,
+                    gcalUrl: generateGoogleCalendarUrl(`Servis: ${veh ? veh.model : ''}`, `Servis terakhir: ${formatIndoDate(s.date)}\nPekerjaan: ${taskSummary}${partSummary ? '\nSuku cadang: ' + partSummary : ''}`, s.nextDate)
+                });
+            });
+
             // Filter
             if (search) {
                 items = items.filter(i => i.title.toLowerCase().includes(search) || i.kategori.toLowerCase().includes(search) || i.detail.toLowerCase().includes(search));
@@ -1210,8 +1248,14 @@
                 items = items.filter(i => i.status === statusFilter);
             }
 
-            // Sort by nearest due date
-            items.sort((a,b) => new Date(a.dueDate) - new Date(b.dueDate));
+            // Sort: pengingat terdekat dulu, riwayat servis di bagian bawah
+            items.sort((a,b) => {
+                const aHistory = a.status === 'RIWAYAT';
+                const bHistory = b.status === 'RIWAYAT';
+                if (aHistory !== bHistory) return aHistory ? 1 : -1;
+                if (aHistory && bHistory) return new Date(b.historyDate || b.dueDate) - new Date(a.historyDate || a.dueDate);
+                return new Date(a.dueDate) - new Date(b.dueDate);
+            });
 
             if (items.length === 0) {
                 tbody.innerHTML = `<tr><td colspan="6" class="py-8 text-center text-neutral-400">Tidak ada jadwal atau data pengingat.</td></tr>`;
@@ -1224,9 +1268,15 @@
                     statusBadge = `<span class="inline-flex items-center space-x-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-red-100 text-red-800 dark:bg-red-950 dark:text-red-300"><span class="w-1.5 h-1.5 rounded-full bg-red-600"></span><span>Terlewat (${Math.abs(item.diff)} hr)</span></span>`;
                 } else if (item.status === 'SEGERA') {
                     statusBadge = `<span class="inline-flex items-center space-x-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-900 dark:bg-amber-950 dark:text-amber-200"><span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span><span>Segera (${item.diff} hr)</span></span>`;
+                } else if (item.status === 'RIWAYAT') {
+                    statusBadge = `<span class="inline-flex items-center space-x-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-neutral-100 text-neutral-600 dark:bg-neutral-800 dark:text-neutral-300"><span class="w-1.5 h-1.5 rounded-full bg-neutral-400"></span><span>Riwayat</span></span>`;
                 } else {
                     statusBadge = `<span class="inline-flex items-center space-x-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span><span>Aman (${item.diff} hr)</span></span>`;
                 }
+
+                const dateCell = item.status === 'RIWAYAT'
+                    ? `<div class="font-mono font-semibold">${formatIndoDate(item.historyDate)}</div><div class="text-[9px] text-neutral-400">Tgl servis</div>`
+                    : `<div class="font-mono font-semibold">${formatIndoDate(item.dueDate)}</div>`;
 
                 return `
                     <tr class="hover:bg-neutral-50 dark:hover:bg-neutral-900/40 transition">
@@ -1234,12 +1284,13 @@
                         <td class="py-3 px-4 font-bold text-[#141414] dark:text-white">${item.title}</td>
                         <td class="py-3 px-4 text-neutral-500">${item.detail}</td>
                         <td class="py-3 px-4">${statusBadge}</td>
-                        <td class="py-3 px-4 font-mono font-semibold">${formatIndoDate(item.dueDate)}</td>
+                        <td class="py-3 px-4">${dateCell}</td>
                         <td class="py-3 px-4 text-center">
+                            ${item.status === 'RIWAYAT' ? '<span class="text-neutral-300 dark:text-neutral-600">—</span>' : `
                             <a href="${item.gcalUrl}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center space-x-1 px-3 py-1 rounded-full border border-neutral-200 dark:border-neutral-700 text-[11px] font-medium hover:bg-neutral-100 dark:hover:bg-neutral-800 transition">
                                 <i data-lucide="calendar-plus" class="w-3.5 h-3.5 text-[#D63333]"></i>
                                 <span>+GCal</span>
-                            </a>
+                            </a>`}
                         </td>
                     </tr>
                 `;
